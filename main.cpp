@@ -10,38 +10,18 @@
 #include <unistd.h>
 #include "includes/Server.hpp"
 #include "includes/User.hpp"
+#include <signal.h>
 #include <cstdio>
+
+int ft_exit()
+{
+    return (0);
+}
 
 int main(int argc, char **argv) {
 
     Server server(std::atoi(argv[1]));
-    std::vector<User> user(1);
     (void) argc;
-    while (true) {
-        // Acceptation des connexions entrantes
-        if ((user[0].setFd(accept(server.getFd(), (struct sockaddr *)server.getAddress(), (socklen_t*)server.getLenAddress()))) < 0) {
-            std::perror("Erreur lors de l'acceptation de la connexion");
-            exit(EXIT_FAILURE);
-        }
-
-        std::cout << "Connexion acceptée" << std::endl;
-
-        // Lecture et écriture de données sur le socket
-        char buffer[1024] = {0};
-        std::string welcome_message = "ff\r\n";
-
-        send(user[0].getFd(), welcome_message.c_str(), welcome_message.length(), 0);
-
-        int valread = recv(user[0].getFd(), buffer, 1024, 0);
-        std::cout << "Message du client : " << buffer << std::endl;
-        (void) valread;
-        if (std::string(buffer).find("JOIN") != std::string::npos) {
-            // Exemple de réponse au client pour rejoindre un canal
-            std::string join_response = ":sforesti JOIN #blabla : Welcome to #channel\r\n";
-            send(user[0].getFd(), join_response.c_str(), join_response.length(), 0);
-        }
-
-        //send(server_fd, buffer, valread, 0);
-    }
+    
     return 0;
 }

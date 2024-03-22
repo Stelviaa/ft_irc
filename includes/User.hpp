@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   User.hpp                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: sforesti <sforesti@student.42.fr>          +#+  +:+       +#+        */
+/*   By: luxojr <luxojr@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/21 12:57:16 by sforesti          #+#    #+#             */
-/*   Updated: 2024/03/21 14:05:07 by sforesti         ###   ########.fr       */
+/*   Updated: 2024/03/22 19:08:53 by luxojr           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,11 +16,15 @@
 class User{
     private:
         int _fd;
-        std::string nickname;
+        std::string _nickname;
+        std::string _username;
+
     public:
         User();
         ~User();
 
         int setFd(int value);
         int getFd() const;
+        std::string getUsername();
+        void parseName(std::string buf);
 };
