@@ -10,6 +10,7 @@
 #include <unistd.h>
 #include "includes/Server.hpp"
 #include "includes/User.hpp"
+#include <cstdio>
 
 int main(int argc, char **argv) {
 
@@ -20,7 +21,7 @@ int main(int argc, char **argv) {
         // Acceptation des connexions entrantes
         
         if ((user[0].setFd(accept(server.getFd(), (struct sockaddr *)server.getAddress(), (socklen_t*)server.getLenAddress()))) < 0) {
-            //perror("Erreur lors de l'acceptation de la connexion");
+            std::perror("Erreur lors de l'acceptation de la connexion");
             exit(EXIT_FAILURE);
         }
 
@@ -44,6 +45,5 @@ int main(int argc, char **argv) {
 
         //send(server_fd, buffer, valread, 0);
     }
-    close(server.getFd());
     return 0;
 }

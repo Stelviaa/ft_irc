@@ -6,7 +6,7 @@
 /*   By: sforesti <sforesti@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/21 10:32:47 by sforesti          #+#    #+#             */
-/*   Updated: 2024/03/21 14:33:59 by sforesti         ###   ########.fr       */
+/*   Updated: 2024/03/22 12:11:28 by sforesti         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,6 +24,6 @@ class Server{
         ~Server();
 
         int getFd() const;
-        struct sockaddr_in *getAddress() const;
-        int *getLenAddress() const;
+        struct sockaddr_in *getAddress();
+        int *getLenAddress();
 };

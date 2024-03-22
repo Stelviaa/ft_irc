@@ -6,13 +6,15 @@
 /*   By: sforesti <sforesti@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/21 10:11:22 by sforesti          #+#    #+#             */
-/*   Updated: 2024/03/21 14:38:57 by sforesti         ###   ########.fr       */
+/*   Updated: 2024/03/22 12:24:50 by sforesti         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/Server.hpp"
 #include <iostream>
 #include <stdlib.h>
+#include <cstdio>
+#include <unistd.h>
 
 Server::Server(int port){
 
@@ -40,10 +42,14 @@ int Server::getFd() const{
     return (_fd);
 }
 
-struct sockaddr_in *Server::getAddress() const{
+struct sockaddr_in *Server::getAddress(){
     return (&_address);
 }
 
-int *Server::getLenAddress() const{
+int *Server::getLenAddress(){
     return (&_lenAddress);
+}
+
+Server::~Server(){
+    close(_fd);
 }
