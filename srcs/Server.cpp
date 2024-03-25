@@ -6,7 +6,7 @@
 /*   By: luxojr <luxojr@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/21 10:11:22 by sforesti          #+#    #+#             */
-/*   Updated: 2024/03/22 19:21:50 by luxojr           ###   ########.fr       */
+/*   Updated: 2024/03/25 15:59:08 by luxojr           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,26 +40,29 @@ Server::Server(int port)
 	}
 	std::cout << "Serveur IRC en attente de connexions..." << std::endl;
 	
-	this->_users.push_back(User());
+	
 	this->CheckConnection();
 	this->CheckSocket();
 }
 
 void    Server::CheckConnection()
 {
+	User	*usr = new User();
 	char buffer[1024] = {0};
-	if ((this->_users[0].setFd(accept(this->getFd(), (struct sockaddr *)this->getAddress(), (socklen_t*)this->getLenAddress()))) < 0)
+
+	if ((usr->setFd(accept(this->getFd(), (struct sockaddr *)this->getAddress(), (socklen_t*)this->getLenAddress()))) < 0)
 	{
 		std::perror("Erreur lors de l'acceptation de la connexion");
 		exit(EXIT_FAILURE);
 	}
-	this->AddUsers();
 	std::cout << "Connexion acceptée" << std::endl;
-	std::string welcome_message = "Welcome to the server !\r\n";	
-	send(this->_users[0].getFd(), welcome_message.c_str(), welcome_message.length(), 0);
-	recv(this->_users[0].getFd(), buffer, 1024, 0);
-	
-	this->_users[0].parseName(buffer);
+	std::string welcome_message = "Welcome to the server !\r\n";
+	send(usr->getFd(), welcome_message.c_str(), welcome_message.length(), 0);
+	recv(usr->getFd(), buffer, 1024, 0);
+
+	usr->parseName(buffer);
+	this->_users.push_back(usr);
+	this->AddUsers();
 }
 
 void    Server::CheckSocket()
@@ -67,17 +70,23 @@ void    Server::CheckSocket()
 	while (true) {
 		char buffer[1024] = {0};
 		
-		recv(this->_users[0].getFd(), buffer, 1024, 0);
+		recv(this->_users[0]->getFd(), buffer, 1024, 0);
 		std::cout << "Message du client : " << buffer << std::endl;
 		if (std::string(buffer).find("JOIN") != std::string::npos)
 		{
 			std::string join_response = ":";
-			join_response += this->_users[0].getUsername();
+			join_response += this->_users[0]->getUsername();
+			std::cout << this->_users[0]->getUsername() << std::endl;
 			join_response += " JOIN #blabla : Welcome to #channel\r\n";
-			send(this->_users[0].getFd(), join_response.c_str(), join_response.length(), 0);
+			send(this->_users[0]->getFd(), join_response.c_str(), join_response.length(), 0);
 		}
 	}
 }
+
+
+
+
+/****************    GETTER    ***********************/
 
 int Server::getFd() const
 {

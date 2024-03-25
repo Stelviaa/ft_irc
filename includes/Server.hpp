@@ -6,13 +6,14 @@
 /*   By: luxojr <luxojr@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/21 10:32:47 by sforesti          #+#    #+#             */
-/*   Updated: 2024/03/22 18:15:19 by luxojr           ###   ########.fr       */
+/*   Updated: 2024/03/25 16:13:55 by luxojr           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #pragma once
 #include <netinet/in.h>
 #include "User.hpp"
+#include "poll.h"
 #include <vector>
 
 class Server{
@@ -26,7 +27,7 @@ class Server{
     public:
         Server(int port);
         ~Server();
-        std::vector<User>   _users;
+        std::vector<User *>   _users;
         int getFd() const;
         struct sockaddr_in *getAddress();
         int getNbUsers();
