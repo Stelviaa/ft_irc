@@ -6,7 +6,7 @@
 /*   By: luxojr <luxojr@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/21 10:11:22 by sforesti          #+#    #+#             */
-/*   Updated: 2024/03/25 15:59:08 by luxojr           ###   ########.fr       */
+/*   Updated: 2024/03/25 18:37:17 by luxojr           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,6 +15,7 @@
 #include <stdlib.h>
 #include <cstdio>
 #include <unistd.h>
+#include <fcntl.h>
 
 Server::Server(int port)
 {
@@ -26,6 +27,7 @@ Server::Server(int port)
 		exit(EXIT_FAILURE);
 	}
 	setsockopt(this->_fd, SOL_SOCKET, SO_REUSEADDR, &option, sizeof(option));
+	fcntl(this->_fd, F_SETFL, O_NONBLOCK);
 	_address.sin_family = AF_INET;
 	_address.sin_addr.s_addr = htons(INADDR_ANY);
 	_address.sin_port = htons(port);
@@ -40,8 +42,7 @@ Server::Server(int port)
 	}
 	std::cout << "Serveur IRC en attente de connexions..." << std::endl;
 	
-	
-	this->CheckConnection();
+	//this->CheckConnection();
 	this->CheckSocket();
 }
 
@@ -60,6 +61,7 @@ void    Server::CheckConnection()
 	send(usr->getFd(), welcome_message.c_str(), welcome_message.length(), 0);
 	recv(usr->getFd(), buffer, 1024, 0);
 
+	fcntl(usr->getFd(), F_SETFL, O_NONBLOCK);
 	usr->parseName(buffer);
 	this->_users.push_back(usr);
 	this->AddUsers();
@@ -67,19 +69,40 @@ void    Server::CheckConnection()
 
 void    Server::CheckSocket()
 {
-	while (true) {
+	struct pollfd fds[4096];
+	int				i = 1;
+
+	fds[0].fd = this->_fd;
+	fds[0].events = POLLIN;
+	
+	while (poll(fds, this->getNbUsers() + 1, -1) != -1)
+	{
 		char buffer[1024] = {0};
-		
-		recv(this->_users[0]->getFd(), buffer, 1024, 0);
-		std::cout << "Message du client : " << buffer << std::endl;
-		if (std::string(buffer).find("JOIN") != std::string::npos)
+
+		if (fds[0].revents & POLLIN)
 		{
-			std::string join_response = ":";
-			join_response += this->_users[0]->getUsername();
-			std::cout << this->_users[0]->getUsername() << std::endl;
-			join_response += " JOIN #blabla : Welcome to #channel\r\n";
-			send(this->_users[0]->getFd(), join_response.c_str(), join_response.length(), 0);
+			this->CheckConnection();
+			fds[this->_nbUsers].fd = this->_users[this->_nbUsers - 1]->getFd();
+			fds[this->_nbUsers].events = POLLIN;
 		}
+		while (i <= this->getNbUsers())
+		{
+			if(fds[i].revents & POLLIN)
+			{
+				recv(fds[i].fd, buffer, 1024, 0);
+				std::cout << "Message du client : " << buffer << std::endl;
+				if (std::string(buffer).find("JOIN") != std::string::npos)
+				{
+					std::string join_response = ":";
+					join_response += this->_users[i - 1]->getUsername();
+					join_response += " JOIN #blabla : Welcome to #channel\r\n";
+					
+					send(fds[i].fd, join_response.c_str(), join_response.length(), 0);
+				}
+			}
+			i ++;
+		}
+		i = 1;
 	}
 }
 
