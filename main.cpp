@@ -11,11 +11,24 @@
 #include "includes/Server.hpp"
 #include "includes/User.hpp"
 #include <signal.h>
+#include <termios.h>
 #include <cstdio>
 
-int ft_exit()
+void ft_exit(int signal)
 {
-    return (0);
+	(void)signal;
+    exit(0);
+}
+
+void	ft_init_signals(void)
+{
+	struct termios	term;
+
+	tcgetattr(0, &term);
+	term.c_lflag &= ~ECHOCTL;
+	tcsetattr(0, 0, &term);
+	signal(SIGQUIT, ft_exit);
+	signal(SIGINT, ft_exit);
 }
 
 int main(int argc, char **argv) {

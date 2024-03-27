@@ -6,7 +6,7 @@
 /*   By: luxojr <luxojr@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/21 10:11:22 by sforesti          #+#    #+#             */
-/*   Updated: 2024/03/25 18:37:17 by luxojr           ###   ########.fr       */
+/*   Updated: 2024/03/27 19:06:38 by luxojr           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,7 +42,6 @@ Server::Server(int port)
 	}
 	std::cout << "Serveur IRC en attente de connexions..." << std::endl;
 	
-	//this->CheckConnection();
 	this->CheckSocket();
 }
 
@@ -58,38 +57,65 @@ void    Server::CheckConnection()
 	}
 	std::cout << "Connexion acceptée" << std::endl;
 	std::string welcome_message = "Welcome to the server !\r\n";
-	send(usr->getFd(), welcome_message.c_str(), welcome_message.length(), 0);
-	recv(usr->getFd(), buffer, 1024, 0);
 
-	fcntl(usr->getFd(), F_SETFL, O_NONBLOCK);
+	this->AddUsers();
+	this->_fds[this->_nbUsers].fd = usr->getFd();
+	this->_fds[this->_nbUsers].events = POLLIN;
+
+	send(this->_fds[this->_nbUsers].fd, welcome_message.c_str(), welcome_message.length(), 0);
+	recv(this->_fds[this->_nbUsers].fd, buffer, 1024, 0);
+
+	fcntl(this->_fds[this->_nbUsers].fd, F_SETFL, O_NONBLOCK);
+
 	usr->parseName(buffer);
 	this->_users.push_back(usr);
-	this->AddUsers();
+	
+}
+
+void Server::send_all_fd(std::string msg, int i)
+{
+	int n = 1;
+
+	std::string join_response = ":";
+	join_response += this->_users[i - 1]->getUsername();
+	join_response += " ";
+	join_response += msg;
+	while (n <= this->getNbUsers())
+	{
+		if (n != i)
+			send(this->_fds[n].fd, join_response.c_str(), join_response.length(), 0);
+		n ++;
+	}
+}
+
+
+
+std::string	Server::prv_format(std::string buffer)
+{
+	return (buffer);
+
 }
 
 void    Server::CheckSocket()
 {
-	struct pollfd fds[4096];
 	int				i = 1;
 
-	fds[0].fd = this->_fd;
-	fds[0].events = POLLIN;
+	this->_fds[0].fd = this->_fd;
+	this->_fds[0].events = POLLIN;
 	
-	while (poll(fds, this->getNbUsers() + 1, -1) != -1)
+	while (poll(this->_fds, this->getNbUsers() + 1, -1) != -1)
 	{
 		char buffer[1024] = {0};
 
-		if (fds[0].revents & POLLIN)
+		if (this->_fds[0].revents & POLLIN)
 		{
 			this->CheckConnection();
-			fds[this->_nbUsers].fd = this->_users[this->_nbUsers - 1]->getFd();
-			fds[this->_nbUsers].events = POLLIN;
 		}
 		while (i <= this->getNbUsers())
 		{
-			if(fds[i].revents & POLLIN)
+			if(this->_fds[i].revents & POLLIN)
 			{
-				recv(fds[i].fd, buffer, 1024, 0);
+				recv(this->_fds[i].fd, buffer, 1024, 0);
 				std::cout << "Message du client : " << buffer << std::endl;
 				if (std::string(buffer).find("JOIN") != std::string::npos)
 				{
@@ -97,7 +123,16 @@ void    Server::CheckSocket()
 					join_response += this->_users[i - 1]->getUsername();
 					join_response += " JOIN #blabla : Welcome to #channel\r\n";
 					
-					send(fds[i].fd, join_response.c_str(), join_response.length(), 0);
+					send(this->_fds[i].fd, join_response.c_str(), join_response.length(), 0);
+				}
+				if (std::string(buffer).find("QUIT") != std::string::npos)
+				{
+					delete this->_users[i - 1];
+				}
+				if (std::string(buffer).find("PRIVMSG") != std::string::npos)
+				{
+					if (std::string(buffer).find(":") != std::string::npos)
+						this->send_all_fd(buffer, i);
 				}
 			}
 			i ++;
@@ -129,6 +164,11 @@ int Server::getNbUsers()
 void Server::AddUsers()
 {
 	this->_nbUsers ++;
+}
+
+void Server::RemoveUser()
+{
+	this->_nbUsers --;
 }
 
 int *Server::getLenAddress()
