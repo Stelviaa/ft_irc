@@ -14,13 +14,15 @@
 #include <termios.h>
 #include <cstdio>
 
+bool close_server = false;
+
 void ft_exit(int signal)
 {
 	(void)signal;
-    exit(0);
+	close_server = true;
 }
 
-void	ft_init_signals(void)
+/*void	ft_init_signals(void)
 {
 	struct termios	term;
 
@@ -29,10 +31,12 @@ void	ft_init_signals(void)
 	tcsetattr(0, 0, &term);
 	signal(SIGQUIT, ft_exit);
 	signal(SIGINT, ft_exit);
-}
+}*/
 
 int main(int argc, char **argv) {
 
+	signal(SIGQUIT, ft_exit);
+	signal(SIGINT, ft_exit);
     Server server(std::atoi(argv[1]));
     (void) argc;
     

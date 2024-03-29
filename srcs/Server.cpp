@@ -6,7 +6,7 @@
 /*   By: luxojr <luxojr@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/21 10:11:22 by sforesti          #+#    #+#             */
-/*   Updated: 2024/03/27 19:06:38 by luxojr           ###   ########.fr       */
+/*   Updated: 2024/03/29 10:41:24 by luxojr           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,7 +48,6 @@ Server::Server(int port)
 void    Server::CheckConnection()
 {
 	User	*usr = new User();
-	char buffer[1024] = {0};
 
 	if ((usr->setFd(accept(this->getFd(), (struct sockaddr *)this->getAddress(), (socklen_t*)this->getLenAddress()))) < 0)
 	{
@@ -57,19 +56,15 @@ void    Server::CheckConnection()
 	}
 	std::cout << "Connexion acceptée" << std::endl;
 	std::string welcome_message = "Welcome to the server !\r\n";
+	fcntl(this->_fds[this->_nbUsers].fd, F_SETFL, O_NONBLOCK);
 
 	this->AddUsers();
 	this->_fds[this->_nbUsers].fd = usr->getFd();
 	this->_fds[this->_nbUsers].events = POLLIN;
 
 	send(this->_fds[this->_nbUsers].fd, welcome_message.c_str(), welcome_message.length(), 0);
-	recv(this->_fds[this->_nbUsers].fd, buffer, 1024, 0);
 
-	fcntl(this->_fds[this->_nbUsers].fd, F_SETFL, O_NONBLOCK);
-
-	usr->parseName(buffer);
 	this->_users.push_back(usr);
-	
 }
 
 void Server::send_all_fd(std::string msg, int i)
@@ -93,7 +88,20 @@ void Server::send_all_fd(std::string msg, int i)
 std::string	Server::prv_format(std::string buffer)
 {
 	return (buffer);
+}
 
+void	Server::close_serv()
+{
+	std::cout << "Closing server ..." << std::endl;
+	int i = 1;
+	while (i <= this->_nbUsers)
+	{
+		delete(this->_users[i]);
+		i ++;
+	}
+
+	close(this->_fd);
+	std::cout << "Server is closed" << std::endl;
 }
 
 void    Server::CheckSocket()
@@ -103,7 +111,7 @@ void    Server::CheckSocket()
 	this->_fds[0].fd = this->_fd;
 	this->_fds[0].events = POLLIN;
 	
-	while (poll(this->_fds, this->getNbUsers() + 1, -1) != -1)
+	while (poll(this->_fds, this->getNbUsers() + 1, -1) != -1 && close_server == false)
 	{
 		char buffer[1024] = {0};
 
@@ -117,6 +125,10 @@ void    Server::CheckSocket()
 			{
 				recv(this->_fds[i].fd, buffer, 1024, 0);
 				std::cout << "Message du client : " << buffer << std::endl;
+				if (std::string(buffer).find("NICK") != std::string::npos)
+				{
+					this->_users[i - 1]->parseName(buffer);
+				}
 				if (std::string(buffer).find("JOIN") != std::string::npos)
 				{
 					std::string join_response = ":";
@@ -139,6 +151,7 @@ void    Server::CheckSocket()
 		}
 		i = 1;
 	}
+	this->close_serv();
 }
 
 
