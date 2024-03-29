@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Server.cpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: luxojr <luxojr@student.42.fr>              +#+  +:+       +#+        */
+/*   By: mboyer <mboyer@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/21 10:11:22 by sforesti          #+#    #+#             */
-/*   Updated: 2024/03/29 10:41:24 by luxojr           ###   ########.fr       */
+/*   Updated: 2024/03/29 16:40:35 by mboyer           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -71,23 +71,21 @@ void Server::send_all_fd(std::string msg, int i)
 {
 	int n = 1;
 
+	std::vector<std::string> split_msg;
 	std::string join_response = ":";
 	join_response += this->_users[i - 1]->getUsername();
 	join_response += " ";
 	join_response += msg;
+
+	split_msg = ft_split(msg, ' ');
+	std::string target = split_msg[1];
+	std::cout << target << "f" << std::endl;
 	while (n <= this->getNbUsers())
 	{
-		if (n != i)
+		if (n != i && (this->_users[n - 1]->getUsername() == target || this->_users[n - 1]->getChannel() == target))
 			send(this->_fds[n].fd, join_response.c_str(), join_response.length(), 0);
 		n ++;
 	}
-}
-
-
-
-std::string	Server::prv_format(std::string buffer)
-{
-	return (buffer);
 }
 
 void	Server::close_serv()
@@ -131,15 +129,31 @@ void    Server::CheckSocket()
 				}
 				if (std::string(buffer).find("JOIN") != std::string::npos)
 				{
-					std::string join_response = ":";
-					join_response += this->_users[i - 1]->getUsername();
-					join_response += " JOIN #blabla : Welcome to #channel\r\n";
+					std::vector<std::string> splitted;
 					
-					send(this->_fds[i].fd, join_response.c_str(), join_response.length(), 0);
+					splitted = ft_split(buffer, ' ');
+					if (splitted[1][0] == '#')
+					{
+						std::string join_response = ":";
+						join_response += this->_users[i - 1]->getUsername();
+						join_response += " JOIN ";
+						join_response += splitted[1];
+						join_response += "\r\n";
+						this->_users[i - 1]->setChannel(splitted[1]);
+						std::cout << splitted[1] << std::endl;
+						send(this->_fds[i].fd, join_response.c_str(), join_response.length(), 0);
+					}
 				}
 				if (std::string(buffer).find("QUIT") != std::string::npos)
 				{
 					delete this->_users[i - 1];
+					if (i != this->_nbUsers)
+					{
+						this->_users[i -1] = this->_users[this->_nbUsers - 1];
+						this->_users[this->_nbUsers - 1] = 0;
+						this->_fds[i] = this->_fds[this->_nbUsers];
+					}
+					this->_nbUsers --;
 				}
 				if (std::string(buffer).find("PRIVMSG") != std::string::npos)
 				{
@@ -153,6 +167,7 @@ void    Server::CheckSocket()
 	}
 	this->close_serv();
 }
+
 
 
 

@@ -1,4 +1,4 @@
-SRCS = main.cpp srcs/Server.cpp	srcs/User.cpp
+SRCS = main.cpp srcs/Server.cpp	srcs/User.cpp srcs/utils.cpp
 
 CC = c++
 

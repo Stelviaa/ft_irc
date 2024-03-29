@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   User.cpp                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: luxojr <luxojr@student.42.fr>              +#+  +:+       +#+        */
+/*   By: mboyer <mboyer@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/21 13:00:10 by sforesti          #+#    #+#             */
-/*   Updated: 2024/03/25 17:52:23 by luxojr           ###   ########.fr       */
+/*   Updated: 2024/03/29 16:09:20 by mboyer           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,6 +34,15 @@ int User::setFd(int value){
     return (value);
 }
 
+void    User::setChannel(std::string chan)
+{
+    this->_channel = chan;
+}
+
+std::string    User::getChannel()
+{
+    return (this->_channel);
+}
 
 std::string User::getUsername()
 {
