@@ -3,18 +3,19 @@
 /*                                                        :::      ::::::::   */
 /*   User.cpp                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mboyer <mboyer@student.42.fr>              +#+  +:+       +#+        */
+/*   By: luxojr <luxojr@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/21 13:00:10 by sforesti          #+#    #+#             */
-/*   Updated: 2024/03/29 16:09:20 by mboyer           ###   ########.fr       */
+/*   Updated: 2024/03/30 18:25:44 by luxojr           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/User.hpp"
+#include "../includes/irc.hpp"
 #include <unistd.h>
 
 User::User(){
-    
+    this->_status = 0;
 }
 
 void    User::parseName(std::string buf)
@@ -24,7 +25,10 @@ void    User::parseName(std::string buf)
     start = buf.find("NICK") + 5;
     std::string name;
     name = buf.substr(start, buf.size() - start);
-    this->_username = name.substr(0, name.find('\n'));
+    if (name.find('\r') != std::string::npos)
+        this->_username = name.substr(0, name.find('\r'));
+    else if (name.find('\n') != std::string::npos)
+        this->_username = name.substr(0, name.find('\n'));
 }
 
 int User::setFd(int value){
@@ -47,6 +51,16 @@ std::string    User::getChannel()
 std::string User::getUsername()
 {
     return (this->_username);
+}
+
+int User::getStatus()
+{
+    return (this->_status);
+}
+
+void User::setStatus(int i)
+{
+    this->_status = i;
 }
 
 int User::getFd() const{

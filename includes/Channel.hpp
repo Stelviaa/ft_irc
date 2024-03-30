@@ -1,26 +1,35 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   irc.hpp                                            :+:      :+:    :+:   */
+/*   Channel.hpp                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: luxojr <luxojr@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/03/29 14:39:21 by mboyer            #+#    #+#             */
-/*   Updated: 2024/03/30 18:01:27 by luxojr           ###   ########.fr       */
+/*   Created: 2024/03/30 17:02:26 by luxojr            #+#    #+#             */
+/*   Updated: 2024/03/30 18:14:59 by luxojr           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef IRC_HPP
-# define IRC_HPP
-# include <string.h>
-# include <iostream>
+#ifndef CHANNEL_HPP
+# define CHANNEL_HPP
+# include "User.hpp"
 # include <vector>
-# include "Channel.hpp"
 
-std::vector<std::string> ft_split(std::string string, char sep);
-int find_index(std::vector<std::string> vec, std::string str);
-int find_channel(std::vector<Channel *> vec, std::string str);
-std::string get_name(std::string name);
-void    show_vec(std::vector<std::string> vec);
+
+class Channel
+{
+	public:
+		Channel(std::string name, User *op);
+		~Channel();
+		std::string	getName();
+		void	AddUsers(User *usr);
+
+	private:
+		std::vector<User *> _op;
+		std::vector<User *> _users;
+		std::string	_name;
+
+
+};
 
 #endif

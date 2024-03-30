@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   User.hpp                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mboyer <mboyer@student.42.fr>              +#+  +:+       +#+        */
+/*   By: luxojr <luxojr@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/21 12:57:16 by sforesti          #+#    #+#             */
-/*   Updated: 2024/03/29 16:07:53 by mboyer           ###   ########.fr       */
+/*   Updated: 2024/03/30 18:24:16 by luxojr           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,11 +15,11 @@
 # include <iostream>
 # include <vector>
 # include <string>
-# include "irc.hpp"
 
 class User{
     private:
         int _fd;
+        int _status;
         std::string _nickname;
         std::string _username;
         std::string _channel;
@@ -30,6 +30,8 @@ class User{
 
         int setFd(int value);
         int getFd() const;
+        int getStatus();
+        void setStatus(int i);
         void    setChannel(std::string chan);
         std::string    getChannel();
         std::string getUsername();

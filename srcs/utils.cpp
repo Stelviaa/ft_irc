@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   utils.cpp                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mboyer <mboyer@student.42.fr>              +#+  +:+       +#+        */
+/*   By: luxojr <luxojr@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/29 14:37:44 by mboyer            #+#    #+#             */
-/*   Updated: 2024/03/29 15:57:32 by mboyer           ###   ########.fr       */
+/*   Updated: 2024/03/30 18:01:11 by luxojr           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,6 +29,45 @@ std::vector<std::string> ft_split(std::string string, char sep)
             index = std::string::npos;
         ret.push_back(string.substr(0, index));
     }
+    return (ret);
+}
+
+int find_index(std::vector<std::string> vec, std::string str)
+{
+    size_t i = 0;
+
+    while (i < vec.size())
+    {
+        if (vec[i].find(str) != std::string::npos)
+            return (i);
+        i ++;
+    }
+    return (-1);
+}
+
+int find_channel(std::vector<Channel *> vec, std::string str)
+{
+    size_t i = 0;
+
+    while (i < vec.size())
+    {
+        if (vec[i]->getName().find(str) != std::string::npos)
+            return (i);
+        i ++;
+    }
+    return (-1);
+}
+
+std::string get_name(std::string name)
+{
+    std::string ret;
+    
+    if (name.find("\r") != std::string::npos)
+        ret = name.substr(0, name.find("\r"));
+    else if (name.find("\n") != std::string::npos)
+        ret = name.substr(0, name.find("\n"));
+    else
+        ret = name;
     return (ret);
 }
 
