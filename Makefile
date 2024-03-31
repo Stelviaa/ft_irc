@@ -1,5 +1,13 @@
-SRCS = main.cpp srcs/Server.cpp	srcs/User.cpp srcs/utils.cpp srcs/Channel.cpp
-
+SRCS = main.cpp \
+		srcs/Server.cpp	\
+		srcs/User.cpp \
+		srcs/utils.cpp \
+		srcs/Channel.cpp \
+		srcs/commands/join.cpp \
+		srcs/commands/kick.cpp \
+		srcs/commands/privmsg.cpp \
+		srcs/Commands.cpp
+ 
 CC = c++
 
 CFLAGS = -Wall -Wextra -Werror -std=c++98

@@ -6,7 +6,7 @@
 /*   By: luxojr <luxojr@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/21 10:32:47 by sforesti          #+#    #+#             */
-/*   Updated: 2024/03/30 18:19:12 by luxojr           ###   ########.fr       */
+/*   Updated: 2024/03/31 12:58:48 by luxojr           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,18 +30,16 @@ class Server
         int                 _lenAddress;
         int                 _nbUsers;
         std::string         _pass;
-        struct pollfd       _fds[4096];
-        std::vector<Channel *>   _channels;
     
     public:
+        struct pollfd       _fds[4096];
         Server(int port, std::string pass);
         ~Server();
         std::vector<User *>   _users;
+        std::vector<Channel *>   _channels;
         int getFd() const;
         struct sockaddr_in *getAddress();
-        void    send_all_fd(std::string msg, int i);
         void    close_serv();
-        void    commands(char buffer[1024], int i);
         void    log_in(std::string buffer, int i);
         int getNbUsers();
         int *getLenAddress();
