@@ -6,7 +6,7 @@
 /*   By: luxojr <luxojr@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/30 17:02:26 by luxojr            #+#    #+#             */
-/*   Updated: 2024/03/30 18:14:59 by luxojr           ###   ########.fr       */
+/*   Updated: 2024/04/01 08:32:56 by luxojr           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,6 +14,7 @@
 # define CHANNEL_HPP
 # include "User.hpp"
 # include <vector>
+# include <map>
 
 
 class Channel
@@ -22,11 +23,13 @@ class Channel
 		Channel(std::string name, User *op);
 		~Channel();
 		std::string	getName();
+		int		is_op(User *usr);
 		void	AddUsers(User *usr);
+		std::map<std::string, User *> _users;
+
 
 	private:
 		std::vector<User *> _op;
-		std::vector<User *> _users;
 		std::string	_name;
 
 

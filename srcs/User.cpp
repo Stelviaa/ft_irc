@@ -6,7 +6,7 @@
 /*   By: luxojr <luxojr@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/21 13:00:10 by sforesti          #+#    #+#             */
-/*   Updated: 2024/03/30 18:25:44 by luxojr           ###   ########.fr       */
+/*   Updated: 2024/04/01 08:36:25 by luxojr           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,7 +38,7 @@ int User::setFd(int value){
     return (value);
 }
 
-void    User::setChannel(std::string chan)
+/*void    User::setChannel(std::string chan)
 {
     this->_channel = chan;
 }
@@ -46,7 +46,7 @@ void    User::setChannel(std::string chan)
 std::string    User::getChannel()
 {
     return (this->_channel);
-}
+}*/
 
 std::string User::getUsername()
 {

@@ -6,7 +6,7 @@
 /*   By: luxojr <luxojr@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/21 10:11:22 by sforesti          #+#    #+#             */
-/*   Updated: 2024/03/31 13:07:07 by luxojr           ###   ########.fr       */
+/*   Updated: 2024/04/01 08:40:00 by luxojr           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,6 +57,7 @@ void    Server::CheckConnection()
 	}
 	std::cout << "Connexion acceptée" << std::endl;
 	std::string welcome_message = "Welcome to the server !\r\n";
+	usr->_id = this->_nbUsers;
 	fcntl(this->_fds[this->_nbUsers].fd, F_SETFL, O_NONBLOCK);
 
 	this->AddUsers();

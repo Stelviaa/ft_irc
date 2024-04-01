@@ -6,7 +6,7 @@
 /*   By: luxojr <luxojr@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/21 10:32:47 by sforesti          #+#    #+#             */
-/*   Updated: 2024/03/31 12:58:48 by luxojr           ###   ########.fr       */
+/*   Updated: 2024/03/31 22:17:43 by luxojr           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,6 +18,7 @@
 # include "irc.hpp"
 # include "poll.h"
 # include <vector>
+# include <map>
 
 extern bool close_server;
 
@@ -36,7 +37,7 @@ class Server
         Server(int port, std::string pass);
         ~Server();
         std::vector<User *>   _users;
-        std::vector<Channel *>   _channels;
+        std::map<std::string , Channel *>   _channels;
         int getFd() const;
         struct sockaddr_in *getAddress();
         void    close_serv();

@@ -6,7 +6,7 @@
 /*   By: luxojr <luxojr@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/31 12:54:49 by luxojr            #+#    #+#             */
-/*   Updated: 2024/03/31 12:56:42 by luxojr           ###   ########.fr       */
+/*   Updated: 2024/04/01 08:42:10 by luxojr           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,6 +26,7 @@ void commands(Server *server, char buffer[1024], int i)
 		if (i != server->getNbUsers())
 		{
 			server->_users[i -1] = server->_users[server->getNbUsers() - 1];
+			server->_users[i - 1]->_id = i - 1;
 			server->_users[server->getNbUsers() - 1] = 0;
 			server->_fds[i] = server->_fds[server->getNbUsers()];
 		}
