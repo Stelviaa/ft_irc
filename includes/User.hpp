@@ -6,7 +6,7 @@
 /*   By: luxojr <luxojr@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/21 12:57:16 by sforesti          #+#    #+#             */
-/*   Updated: 2024/04/01 08:40:21 by luxojr           ###   ########.fr       */
+/*   Updated: 2024/04/02 19:01:45 by luxojr           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,6 +28,7 @@ class User{
         ~User();
 
         int _id;
+        std::string buffer;
         int setFd(int value);
         int getFd() const;
         int getStatus();

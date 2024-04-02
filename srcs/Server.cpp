@@ -6,7 +6,7 @@
 /*   By: luxojr <luxojr@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/21 10:11:22 by sforesti          #+#    #+#             */
-/*   Updated: 2024/04/01 08:40:00 by luxojr           ###   ########.fr       */
+/*   Updated: 2024/04/02 19:09:42 by luxojr           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,12 +57,12 @@ void    Server::CheckConnection()
 	}
 	std::cout << "Connexion acceptée" << std::endl;
 	std::string welcome_message = "Welcome to the server !\r\n";
-	usr->_id = this->_nbUsers;
-	fcntl(this->_fds[this->_nbUsers].fd, F_SETFL, O_NONBLOCK);
-
 	this->AddUsers();
+
+	usr->_id = this->_nbUsers;
 	this->_fds[this->_nbUsers].fd = usr->getFd();
 	this->_fds[this->_nbUsers].events = POLLIN;
+	fcntl(this->_fds[this->_nbUsers].fd, F_SETFL, O_NONBLOCK);
 
 	send(this->_fds[this->_nbUsers].fd, welcome_message.c_str(), welcome_message.length(), 0);
 
@@ -131,6 +131,8 @@ void    Server::CheckSocket()
 			if(this->_fds[i].revents & POLLIN)
 			{
 				recv(this->_fds[i].fd, buffer, 1024, 0);
+				this->_users[i - 1]->buffer += buffer;
+				
 				std::cout << "Message du client : " << buffer << std::endl;
 				if (this->_users[i - 1]->getStatus() == 0 && !this->_pass.empty())
 					this->log_in(buffer, i);

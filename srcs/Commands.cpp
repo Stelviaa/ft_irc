@@ -6,7 +6,7 @@
 /*   By: luxojr <luxojr@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/31 12:54:49 by luxojr            #+#    #+#             */
-/*   Updated: 2024/04/01 08:42:10 by luxojr           ###   ########.fr       */
+/*   Updated: 2024/04/02 19:52:00 by luxojr           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,4 +36,8 @@ void commands(Server *server, char buffer[1024], int i)
 		privmsg_cmd(server, buffer, i);
 	if (std::string(buffer).find("KICK") != std::string::npos)
 		kick_cmd(server, buffer, i);
+	if (std::string(buffer).find("TOPIC") != std::string::npos)
+		topic_cmd(server, buffer, i);
+	if (std::string(buffer).find("MODE") != std::string::npos)
+		mode_cmd(server, buffer, i);
 }

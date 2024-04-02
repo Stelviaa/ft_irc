@@ -6,7 +6,10 @@ SRCS = main.cpp \
 		srcs/commands/join.cpp \
 		srcs/commands/kick.cpp \
 		srcs/commands/privmsg.cpp \
+		srcs/commands/topic.cpp \
+		srcs/commands/mode.cpp \
 		srcs/Commands.cpp
+
  
 CC = c++
 

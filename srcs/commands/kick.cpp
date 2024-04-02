@@ -6,7 +6,7 @@
 /*   By: luxojr <luxojr@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/31 12:26:14 by luxojr            #+#    #+#             */
-/*   Updated: 2024/04/01 09:32:22 by luxojr           ###   ########.fr       */
+/*   Updated: 2024/04/02 18:11:11 by luxojr           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,7 +36,15 @@ void	kick_cmd(Server *server, std::string buffer, int i)
 				if (server->_channels[chan]->_users.find(name) != server->_channels[chan]->_users.end())
 				{
 					send(server->_fds[i].fd, "This user has been kicked\n", 27, 0);
-					send(server->_fds[server->_channels[chan]->_users[name]->_id].fd, "You have been kicked\n", 22, 0);
+					if (splitted.size() == 4)
+					{
+						std::string msg = "You have been kicked ";
+						msg += splitted[3];
+						msg += "\n";
+						send(server->_fds[server->_channels[chan]->_users[name]->_id].fd, msg.c_str(), msg.size(), 0);
+					}
+					else
+						send(server->_fds[server->_channels[chan]->_users[name]->_id].fd, "You have been kicked\n", 22, 0);
 					server->_channels[chan]->_users.erase(name);
 				}
 				else
