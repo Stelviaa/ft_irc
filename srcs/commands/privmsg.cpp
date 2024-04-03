@@ -3,20 +3,21 @@
 /*                                                        :::      ::::::::   */
 /*   privmsg.cpp                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: luxojr <luxojr@student.42.fr>              +#+  +:+       +#+        */
+/*   By: mpelazza <mpelazza@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/29 12:43:37 by mboyer            #+#    #+#             */
-/*   Updated: 2024/04/01 09:28:48 by luxojr           ###   ########.fr       */
+/*   Updated: 2024/04/03 14:47:41 by mpelazza         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/Commands.hpp"
 #include <map>
 
-void	privmsg_cmd(Server *server, std::string buffer, int i)
+void	privmsg_cmd(Server *server, std::vector<std::string> param, int i)
 {
-	if (std::string(buffer).find(":") != std::string::npos)
-		send_all_fd(server, buffer, i);
+	// param[0] == destinataire
+	if (std::string(param[1]).find(":") != std::string::npos)
+		send_all_fd(server, param[1], i);
 }
 
 void send_all_fd(Server *server, std::string msg, int i)
