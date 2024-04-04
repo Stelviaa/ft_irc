@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   privmsg.cpp                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mpelazza <mpelazza@student.42.fr>          +#+  +:+       +#+        */
+/*   By: mpelazza <mpelazza@student.42nice.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/29 12:43:37 by mboyer            #+#    #+#             */
-/*   Updated: 2024/04/03 14:47:41 by mpelazza         ###   ########.fr       */
+/*   Updated: 2024/04/04 13:50:54 by mpelazza         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,11 @@
 
 void	privmsg_cmd(Server *server, std::vector<std::string> param, int i)
 {
-	// param[0] == destinataire
+	if (param.empty()) {
+		send(server->_fds[i].fd, "PRIVMSG error: missing parameters\n", 34, 0);
+		return ;
+	}
+	// param[0] == <destinataire>{,<destinataire>}
 	if (std::string(param[1]).find(":") != std::string::npos)
 		send_all_fd(server, param[1], i);
 }
@@ -30,6 +34,7 @@ void send_all_fd(Server *server, std::string msg, int i)
 	join_response += " ";
 	join_response += msg;
 	split_msg = ft_split(msg, ' ');
+	// remplacer avec le taff pas push
 
 	std::string target = split_msg[1];
 	if (target[0] == '#')

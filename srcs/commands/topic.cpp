@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   topic.cpp                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mpelazza <mpelazza@student.42.fr>          +#+  +:+       +#+        */
+/*   By: mpelazza <mpelazza@student.42nice.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/01 15:08:43 by luxojr            #+#    #+#             */
-/*   Updated: 2024/04/03 14:53:54 by mpelazza         ###   ########.fr       */
+/*   Updated: 2024/04/04 11:37:26 by mpelazza         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,12 @@
 
 void	topic_cmd(Server *server, std::vector<std::string> split_msg, int i)
 {
-	std::string chan = get_name(split_msg[0]);
+	if (split_msg.empty()) {
+		send(server->_fds[i].fd, "TOPIC error: missing parameters\n", 32, 0);
+		//<canal> [<sujet>]
+		return ;
+	}
+	std::string chan = split_msg[0];
 	if (server->_channels.find(chan) == server->_channels.end())
 	{
 		send(server->_fds[i].fd, "This channel doesn't exist\n", 28, 0);

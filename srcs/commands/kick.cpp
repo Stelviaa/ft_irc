@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   kick.cpp                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mpelazza <mpelazza@student.42.fr>          +#+  +:+       +#+        */
+/*   By: mpelazza <mpelazza@student.42nice.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/31 12:26:14 by luxojr            #+#    #+#             */
-/*   Updated: 2024/04/03 14:49:45 by mpelazza         ###   ########.fr       */
+/*   Updated: 2024/04/04 11:28:51 by mpelazza         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,9 +17,11 @@ void	kick_cmd(Server *server, std::vector<std::string> splitted, int i)
 	std::string	chan;
 	std::string name;
 
-	//if (splitted.empty())
-	// Missing parameters
-	// return ;
+	if (splitted.size() < 2) {
+		send(server->_fds[i].fd, "KICK error: missing parameters\n", 31, 0);
+		//<canal> <user> [<comment>]
+		return ;
+	}
 	if (splitted[0][0] == '#')
 	{
 		chan = get_name(splitted[0]);

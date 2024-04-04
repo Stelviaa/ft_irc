@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   utils.cpp                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: luxojr <luxojr@student.42.fr>              +#+  +:+       +#+        */
+/*   By: mpelazza <mpelazza@student.42nice.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/29 14:37:44 by mboyer            #+#    #+#             */
-/*   Updated: 2024/03/30 18:01:11 by luxojr           ###   ########.fr       */
+/*   Updated: 2024/04/04 13:42:27 by mpelazza         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,8 +62,11 @@ std::string get_name(std::string name)
 {
     std::string ret;
     
-    if (name.find("\r") != std::string::npos)
+    std::cout << "why are you running" << std::endl;
+    if (name.find("\r") != std::string::npos) {
         ret = name.substr(0, name.find("\r"));
+        std::cout << "why are you running" << std::endl;
+    }
     else if (name.find("\n") != std::string::npos)
         ret = name.substr(0, name.find("\n"));
     else

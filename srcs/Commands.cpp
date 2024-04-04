@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Commands.cpp                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mpelazza <mpelazza@student.42.fr>          +#+  +:+       +#+        */
+/*   By: mpelazza <mpelazza@student.42nice.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/31 12:54:49 by luxojr            #+#    #+#             */
-/*   Updated: 2024/04/03 14:57:17 by mpelazza         ###   ########.fr       */
+/*   Updated: 2024/04/04 13:51:51 by mpelazza         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,7 +37,8 @@ std::vector<std::string>	commands_split(std::string raw_cmd)
 			break ;
 		}
 	}
-	split_cmd.back() = get_name(split_cmd.back());
+	if (!split_cmd.empty())
+		split_cmd.back() = get_name(split_cmd.back());
 	return (split_cmd);
 }
 
@@ -48,7 +49,7 @@ s_command	commands_parsing(std::string raw_cmd)
 
 	// std::cout << "vector :" << std::endl;
 	// for (std::vector<std::string>::iterator it = split_cmd.begin(); it != split_cmd.end(); ++it)
-	// 	std::cout << *it << std::endl;
+	// std::cout << *it << std::endl;
 
 	if (!split_cmd.empty() && is_valid_command(split_cmd[0]) == 1)
 	{
@@ -71,22 +72,21 @@ void	commands(Server *server, char buffer[1024], int i)
 {
 	t_command	command = commands_parsing(std::string(buffer));
 
-
 	// std::cout << "structure :" << std::endl;
 	// std::cout << "prefix:\t" << command.prefix << std::endl;
 	// std::cout << "cmd:\t" << command.cmd << std::endl;
 	// for (std::vector<std::string>::iterator it = command.args.begin(); it != command.args.end(); ++it)
 	// std::cout << *it << std::endl;
 
-
 	if (command.cmd.empty())
-		std::cout << "Invalid command format" << std::endl;
+			send(server->_fds[i].fd, "Error: invalid command\n", 23, 0);
 	else if (command.cmd == "NICK")
 	 	server->_users[i - 1]->parseName(buffer);
 	else if (command.cmd == "JOIN")
 		join_cmd(server, command.args, i);
 	else if (command.cmd == "QUIT")
 	{
+		// command.args[0] == [<Message>] 
 		delete server->_users[i - 1];
 		if (i != server->getNbUsers())
 		{

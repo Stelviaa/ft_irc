@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   join.cpp                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mpelazza <mpelazza@student.42.fr>          +#+  +:+       +#+        */
+/*   By: mpelazza <mpelazza@student.42nice.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/29 12:43:14 by mboyer            #+#    #+#             */
-/*   Updated: 2024/04/03 14:50:03 by mpelazza         ###   ########.fr       */
+/*   Updated: 2024/04/04 11:29:05 by mpelazza         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,10 +16,12 @@
 void	join_cmd(Server *server, std::vector<std::string> splitted, int i)
 {
 	std::string	name;
-	
-	//if (splitted.empty())
-		// Missing parameters
-		// return ;
+
+	if (splitted.empty()) {
+		send(server->_fds[i].fd, "JOIN error: missing parameters\n", 31, 0);
+		//<canal>{,<canal>} [<key>{,<key>}] 
+		return ;
+	}
 	if (splitted[0][0] == '#')
 	{
 		name = get_name(splitted[0]);
