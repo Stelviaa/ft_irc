@@ -6,7 +6,7 @@
 /*   By: mpelazza <mpelazza@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/01 15:30:05 by luxojr            #+#    #+#             */
-/*   Updated: 2024/04/05 18:19:51 by mpelazza         ###   ########.fr       */
+/*   Updated: 2024/04/05 18:22:16 by mpelazza         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,7 +30,7 @@ t_param	mode_cmd_param_check(Server *server, std::vector<std::string> &split_msg
 	}
 	param.chan = split_msg[0];
 	param.mods = split_msg[1];
-	for (int k = 0; k < param.mods.size(); k++) {
+	for (size_t k = 0; k < param.mods.size(); k++) {
 		if (param.mods[k] != 'i' && param.mods[k] != 't' && param.mods[k] != 'k' && param.mods[k] != 'l' &&
 			param.mods[k] != 'o' && param.mods[k] != '+' && param.mods[k] != '-') {
 				std::string	err = param.mods[k] + " :is unknow mode char to me\n";

@@ -6,7 +6,7 @@
 /*   By: mpelazza <mpelazza@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/30 20:25:21 by luxojr            #+#    #+#             */
-/*   Updated: 2024/04/05 16:56:38 by mpelazza         ###   ########.fr       */
+/*   Updated: 2024/04/05 18:21:56 by mpelazza         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,7 +40,7 @@ void	err_need_more_params(Server *server, std::string cmd, int i);
 void	err_cannot_join_chan(Server *server, std::string chan, int i, char c);
 void	err_not_operator(Server *server, std::string chan, int i);
 void	err_no_such_channel(Server *server, std::string chan, int i);
-void	err_user_not_in_chan(Server *server, std::string user, std::string chan, int i) {
+void	err_user_not_in_chan(Server *server, std::string user, std::string chan, int i);
 
 
 #endif

@@ -6,7 +6,7 @@
 /*   By: mpelazza <mpelazza@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/29 12:44:10 by mboyer            #+#    #+#             */
-/*   Updated: 2024/04/05 16:44:34 by mpelazza         ###   ########.fr       */
+/*   Updated: 2024/04/05 18:24:28 by mpelazza         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,7 @@
 
 int is_non_ascii(const std::string & str)
 {
-	for (int i = 0; i < str.length(); ++i) {
+	for (size_t i = 0; i < str.length(); ++i) {
 		if (static_cast<unsigned char>(str[i]) > 127)
 			return (1);
 	}

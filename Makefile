@@ -3,11 +3,13 @@ SRCS = main.cpp \
 		srcs/User.cpp \
 		srcs/utils.cpp \
 		srcs/Channel.cpp \
+		srcs/commands/nick.cpp \
 		srcs/commands/join.cpp \
 		srcs/commands/kick.cpp \
 		srcs/commands/privmsg.cpp \
 		srcs/commands/topic.cpp \
 		srcs/commands/mode.cpp \
+		srcs/commands/errors.cpp \
 		srcs/Commands.cpp
 
  

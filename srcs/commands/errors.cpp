@@ -6,11 +6,11 @@
 /*   By: mpelazza <mpelazza@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/05 15:03:50 by mpelazza          #+#    #+#             */
-/*   Updated: 2024/04/05 16:13:39 by mpelazza         ###   ########.fr       */
+/*   Updated: 2024/04/05 18:22:51 by mpelazza         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../includes/Commands.hpp"
+#include "../../includes/Commands.hpp"
 
 void	err_need_more_params(Server *server, std::string cmd, int i) {
 	std::string	err = cmd + " :Not enough parameters\n";
