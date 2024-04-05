@@ -6,7 +6,7 @@
 /*   By: luxojr <luxojr@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/30 17:02:26 by luxojr            #+#    #+#             */
-/*   Updated: 2024/04/03 01:16:54 by luxojr           ###   ########.fr       */
+/*   Updated: 2024/04/05 16:02:06 by luxojr           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,11 +37,12 @@ class Channel
 		size_t			_userLimit;
 		int _mode;
 		std::vector<User *> _op;
+		std::vector<std::string> _invitedUsers;
 
 
 	private:
 		
-		std::map<std::string, User *> _invitedUsers;
+		
 		std::string	_password;
 		std::string	_name;
 		

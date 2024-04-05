@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Commands.hpp                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mpelazza <mpelazza@student.42.fr>          +#+  +:+       +#+        */
+/*   By: luxojr <luxojr@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/30 20:25:21 by luxojr            #+#    #+#             */
-/*   Updated: 2024/04/05 09:43:17 by mpelazza         ###   ########.fr       */
+/*   Updated: 2024/04/05 15:02:58 by luxojr           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,6 +33,7 @@ void	kick_cmd(Server *server, std::vector<std::string> splitted, int i);
 void	privmsg_cmd(Server *server, std::vector<std::string> param, int i);
 void 	send_all_fd(Server *server, std::vector<std::string> split_msg, int i);
 void	topic_cmd(Server *server, std::vector<std::string> split_msg, int i);
+void	invite_cmd(Server *server, std::vector<std::string> split_msg, int i);
 void 	mode_cmd(Server *server, std::vector<std::string> split_msg, int i);
 
 #endif
