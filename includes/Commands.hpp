@@ -6,7 +6,7 @@
 /*   By: mpelazza <mpelazza@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/30 20:25:21 by luxojr            #+#    #+#             */
-/*   Updated: 2024/04/03 14:57:02 by mpelazza         ###   ########.fr       */
+/*   Updated: 2024/04/05 09:43:17 by mpelazza         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,7 +31,7 @@ void	commands(Server *server, char buffer[1024], int i);
 void	join_cmd(Server *server, std::vector<std::string> splitted, int i);
 void	kick_cmd(Server *server, std::vector<std::string> splitted, int i);
 void	privmsg_cmd(Server *server, std::vector<std::string> param, int i);
-void 	send_all_fd(Server *server, std::string msg, int i);
+void 	send_all_fd(Server *server, std::vector<std::string> split_msg, int i);
 void	topic_cmd(Server *server, std::vector<std::string> split_msg, int i);
 void 	mode_cmd(Server *server, std::vector<std::string> split_msg, int i);
 

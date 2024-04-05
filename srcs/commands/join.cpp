@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   join.cpp                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mpelazza <mpelazza@student.42nice.fr>      +#+  +:+       +#+        */
+/*   By: mpelazza <mpelazza@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/29 12:43:14 by mboyer            #+#    #+#             */
-/*   Updated: 2024/04/04 11:29:05 by mpelazza         ###   ########.fr       */
+/*   Updated: 2024/04/05 09:43:40 by mpelazza         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,7 +24,7 @@ void	join_cmd(Server *server, std::vector<std::string> splitted, int i)
 	}
 	if (splitted[0][0] == '#')
 	{
-		name = get_name(splitted[0]);
+		name = splitted[0];
 		std::string join_response = ":";
 		join_response += server->_users[i - 1]->getUsername();
 		join_response += " JOIN ";
