@@ -6,7 +6,7 @@
 /*   By: mpelazza <mpelazza@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/31 12:54:49 by luxojr            #+#    #+#             */
-/*   Updated: 2024/04/05 16:57:52 by mpelazza         ###   ########.fr       */
+/*   Updated: 2024/04/05 17:37:07 by mpelazza         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,7 +53,7 @@ s_command	commands_parsing(std::string raw_cmd)
 
 	if (!split_cmd.empty() && is_valid_command(split_cmd[0]) == 1)
 	{
-		command.prefix = "";
+		//command.prefix = "";
 		command.cmd = split_cmd[0];
 		command.args.assign(split_cmd.begin() + 1, split_cmd.end());
 	}
@@ -63,8 +63,8 @@ s_command	commands_parsing(std::string raw_cmd)
 		command.cmd = split_cmd[1];
 		command.args.assign(split_cmd.begin() + 2, split_cmd.end());
 	}
-	else
-		command.cmd = "";
+	//else
+	//	command.cmd = "";
 	return (command);
 }
 
