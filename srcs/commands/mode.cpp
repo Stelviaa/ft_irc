@@ -6,11 +6,13 @@
 /*   By: mpelazza <mpelazza@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/01 15:30:05 by luxojr            #+#    #+#             */
-/*   Updated: 2024/04/03 14:56:38 by mpelazza         ###   ########.fr       */
+/*   Updated: 2024/04/05 17:16:18 by mpelazza         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/Commands.hpp"
+
+int	mode_cmd_c(std::vector<std::string> &split_msg) {}
 
 void mode_cmd(Server *server, std::vector<std::string> split_msg, int i)
 {
@@ -21,12 +23,12 @@ void mode_cmd(Server *server, std::vector<std::string> split_msg, int i)
 	chan = get_name(split_msg[0]);
 	if (server->_channels.find(chan) == server->_channels.end())
 	{
-		send(server->_fds[i].fd, "This channel doesn't exist\n", 28, 0);
+		err_no_such_channel(server, split_msg[0], i);
 		return ;
 	}
 	if (!server->_channels[chan]->is_op(server->_users[i - 1]))
 	{
-		send(server->_fds[i].fd, "You are not operator on this channel\n", 38, 0);
+		err_not_operator(server, split_msg[0], i);
 		return ;
 	}
 	if (split_msg[1][0] == '+')
@@ -48,7 +50,7 @@ void mode_cmd(Server *server, std::vector<std::string> split_msg, int i)
 		if (split_msg[1].find("o")  != std::string::npos)
 		{
 			if (server->_channels[chan]->_users.find(get_name(split_msg[2])) == server->_channels[chan]->_users.end())
-				send(server->_fds[i].fd, "This user isn't in this channel\n", 33, 0);
+				err_user_not_in_chan(server, split_msg[2], split_msg[0], i); //split_msg a changer par user
 			else
 				server->_channels[chan]->_op.push_back(server->_channels[chan]->_users[get_name(split_msg[2])]);
 		}

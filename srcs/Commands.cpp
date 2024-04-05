@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Commands.cpp                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mpelazza <mpelazza@student.42nice.fr>      +#+  +:+       +#+        */
+/*   By: mpelazza <mpelazza@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/31 12:54:49 by luxojr            #+#    #+#             */
-/*   Updated: 2024/04/04 13:51:51 by mpelazza         ###   ########.fr       */
+/*   Updated: 2024/04/05 16:57:52 by mpelazza         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -79,9 +79,9 @@ void	commands(Server *server, char buffer[1024], int i)
 	// std::cout << *it << std::endl;
 
 	if (command.cmd.empty())
-			send(server->_fds[i].fd, "Error: invalid command\n", 23, 0);
+		send(server->_fds[i].fd, "Error: invalid command\n", 23, 0);
 	else if (command.cmd == "NICK")
-	 	server->_users[i - 1]->parseName(buffer);
+		nick_cmd(server, command.args, i);
 	else if (command.cmd == "JOIN")
 		join_cmd(server, command.args, i);
 	else if (command.cmd == "QUIT")

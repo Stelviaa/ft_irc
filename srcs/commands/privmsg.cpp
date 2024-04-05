@@ -6,7 +6,7 @@
 /*   By: mpelazza <mpelazza@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/29 12:43:37 by mboyer            #+#    #+#             */
-/*   Updated: 2024/04/05 09:47:13 by mpelazza         ###   ########.fr       */
+/*   Updated: 2024/04/05 16:58:56 by mpelazza         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,10 +16,12 @@
 void	privmsg_cmd(Server *server, std::vector<std::string> param, int i)
 {
 	if (param.empty()) {
-		send(server->_fds[i].fd, "PRIVMSG error: missing parameters\n", 34, 0);
+		send(server->_fds[i].fd, ":No recipient given (PRIVMSG)\n", 30, 0);
 		return ;
 	}
-	// param[0] == <destinataire>{,<destinataire>}
+	if (param.size() < 2)
+		send(server->_fds[i].fd, ":No text to send\n", 16, 0);
+	// param[0] == <destinataire>{,<destinataire>}, erreur si duplicata
 	if (std::string(param[1]).find(":") != std::string::npos)
 		send_all_fd(server, param, i);
 }
