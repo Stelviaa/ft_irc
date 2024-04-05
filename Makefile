@@ -8,6 +8,7 @@ SRCS = main.cpp \
 		srcs/commands/privmsg.cpp \
 		srcs/commands/topic.cpp \
 		srcs/commands/mode.cpp \
+		srcs/commands/invite.cpp \
 		srcs/Commands.cpp
 
  
