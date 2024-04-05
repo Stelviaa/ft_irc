@@ -3,27 +3,29 @@
 /*                                                        :::      ::::::::   */
 /*   kick.cpp                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: luxojr <luxojr@student.42.fr>              +#+  +:+       +#+        */
+/*   By: mpelazza <mpelazza@student.42nice.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/31 12:26:14 by luxojr            #+#    #+#             */
-/*   Updated: 2024/04/02 18:11:11 by luxojr           ###   ########.fr       */
+/*   Updated: 2024/04/04 11:28:51 by mpelazza         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/Commands.hpp"
 
-void	kick_cmd(Server *server, std::string buffer, int i)
+void	kick_cmd(Server *server, std::vector<std::string> splitted, int i)
 {
-
-	std::vector<std::string> splitted;
 	std::string	chan;
 	std::string name;
 
-	splitted = ft_split(buffer, ' ');
-	if (splitted[1][0] == '#')
+	if (splitted.size() < 2) {
+		send(server->_fds[i].fd, "KICK error: missing parameters\n", 31, 0);
+		//<canal> <user> [<comment>]
+		return ;
+	}
+	if (splitted[0][0] == '#')
 	{
-		chan = get_name(splitted[1]);
-		name = get_name(splitted[2]);
+		chan = get_name(splitted[0]);
+		name = get_name(splitted[1]);
 		std::string kick_msg = ":";
 		kick_msg += server->_users[i - 1]->getUsername();
 		kick_msg += " KICK ";
@@ -36,10 +38,10 @@ void	kick_cmd(Server *server, std::string buffer, int i)
 				if (server->_channels[chan]->_users.find(name) != server->_channels[chan]->_users.end())
 				{
 					send(server->_fds[i].fd, "This user has been kicked\n", 27, 0);
-					if (splitted.size() == 4)
+					if (splitted.size() == 3)
 					{
 						std::string msg = "You have been kicked ";
-						msg += splitted[3];
+						msg += splitted[2];
 						msg += "\n";
 						send(server->_fds[server->_channels[chan]->_users[name]->_id].fd, msg.c_str(), msg.size(), 0);
 					}

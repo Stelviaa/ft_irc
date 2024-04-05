@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   User.cpp                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: luxojr <luxojr@student.42.fr>              +#+  +:+       +#+        */
+/*   By: mpelazza <mpelazza@student.42nice.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/21 13:00:10 by sforesti          #+#    #+#             */
-/*   Updated: 2024/04/02 19:08:58 by luxojr           ###   ########.fr       */
+/*   Updated: 2024/04/04 11:24:23 by mpelazza         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,6 +37,10 @@ int User::setFd(int value){
         return (value);
     _fd = value;
     return (value);
+}
+
+void    User::setUsername(std::string username){
+    _username = username;
 }
 
 std::string User::getUsername()
