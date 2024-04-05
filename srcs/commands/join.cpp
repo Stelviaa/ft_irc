@@ -6,7 +6,7 @@
 /*   By: mpelazza <mpelazza@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/29 12:43:14 by mboyer            #+#    #+#             */
-/*   Updated: 2024/04/05 09:43:40 by mpelazza         ###   ########.fr       */
+/*   Updated: 2024/04/05 10:10:50 by mpelazza         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,8 @@ void	join_cmd(Server *server, std::vector<std::string> splitted, int i)
 
 	if (splitted.empty()) {
 		send(server->_fds[i].fd, "JOIN error: missing parameters\n", 31, 0);
-		//<canal>{,<canal>} [<key>{,<key>}] 
+		//<canal>{,<canal>} [<key>{,<key>}]
+		// it can be multiple channel and keys separated by ','
 		return ;
 	}
 	if (splitted[0][0] == '#')
@@ -42,7 +43,7 @@ void	join_cmd(Server *server, std::vector<std::string> splitted, int i)
 					send(server->_fds[i].fd, "You need a password to join this channel\n" , 42, 0);
 					return ;
 				}
-				if (splitted[1].find(server->_channels[name]->getPassword()) == std::string::npos)
+				if (splitted[1] != server->_channels[name]->getPassword())
 				{
 					send(server->_fds[i].fd, "Wrong password\n" , 16, 0);
 					return ;

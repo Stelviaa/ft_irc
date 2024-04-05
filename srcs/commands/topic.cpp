@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   topic.cpp                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mpelazza <mpelazza@student.42nice.fr>      +#+  +:+       +#+        */
+/*   By: mpelazza <mpelazza@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/01 15:08:43 by luxojr            #+#    #+#             */
-/*   Updated: 2024/04/04 11:37:26 by mpelazza         ###   ########.fr       */
+/*   Updated: 2024/04/05 10:52:21 by mpelazza         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,7 +34,7 @@ void	topic_cmd(Server *server, std::vector<std::string> split_msg, int i)
 		else
 			send(server->_fds[i].fd, "This channel don't have any topic\n", 35, 0);
 	}
-	if (split_msg.size() == 2)
+	if (split_msg.size() >= 2)
 	{
 		if ((server->_channels[chan]->_mode & T_OP) && !server->_channels[chan]->is_op(server->_users[i - 1]))
 		{
