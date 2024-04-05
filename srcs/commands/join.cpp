@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   join.cpp                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mpelazza <mpelazza@student.42.fr>          +#+  +:+       +#+        */
+/*   By: luxojr <luxojr@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/29 12:43:14 by mboyer            #+#    #+#             */
-/*   Updated: 2024/04/05 15:41:05 by mpelazza         ###   ########.fr       */
+/*   Updated: 2024/04/05 16:21:57 by luxojr           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,7 +35,6 @@ void	join_cmd(Server *server, std::vector<std::string> splitted, int i)
 			server->_channels[name] = new Channel(name, server->_users[i - 1]);
 		else
 		{
-			std::cout << "Channel mode :" << server->_channels[name]->_mode << std::endl;
 			if (server->_channels[name]->_mode & K_PASS)
 			{
 				if (splitted.size() <= 1)

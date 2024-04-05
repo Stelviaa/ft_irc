@@ -15,7 +15,7 @@
 int	is_valid_command(std::string cmd)
 {
 	if (cmd == "NICK" || cmd == "JOIN" || cmd == "QUIT" || cmd == "PRIVMSG" ||
-		cmd == "KICK" || cmd == "TOPIC" || cmd == "MODE")
+		cmd == "KICK" || cmd == "TOPIC" || cmd == "MODE" || cmd == "INVITE")
 		return (1);
 	return (0);
 }
@@ -103,6 +103,8 @@ void	commands(Server *server, char buffer[1024], int i)
 		kick_cmd(server, command.args, i);
 	else if (command.cmd == "TOPIC")
 		topic_cmd(server, command.args, i);
+	else if (command.cmd == "INVITE")
+		invite_cmd(server, command.args, i);
 	else if (command.cmd == "MODE")
 		mode_cmd(server, command.args, i);
 }

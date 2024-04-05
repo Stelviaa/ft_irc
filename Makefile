@@ -10,6 +10,7 @@ SRCS = main.cpp \
 		srcs/commands/topic.cpp \
 		srcs/commands/mode.cpp \
 		srcs/commands/errors.cpp \
+		srcs/commands/invite.cpp \
 		srcs/Commands.cpp
 
  

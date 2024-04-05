@@ -3,7 +3,7 @@
 /*                                                        :::      ::::::::   */
 /*   mode.cpp                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mpelazza <mpelazza@student.42.fr>          +#+  +:+       +#+        */
+/*   By: luxojr <luxojr@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/01 15:30:05 by luxojr            #+#    #+#             */
 /*   Updated: 2024/04/05 18:22:16 by mpelazza         ###   ########.fr       */
@@ -85,5 +85,23 @@ void mode_cmd(Server *server, std::vector<std::string> split_msg, int i)
 			else
 				server->_channels[p.chan]->_op.push_back(server->_channels[p.chan]->_users[p.user]);
 		}
+	}
+	if (split_msg[1][0] == '-')
+	{
+		if (split_msg[1].find("i")  != std::string::npos && server->_channels[chan]->_mode & I_ONLY)
+			server->_channels[chan]->_mode ^= I_ONLY;
+		if (split_msg[1].find("t")  != std::string::npos && server->_channels[chan]->_mode & T_OP)
+			server->_channels[chan]->_mode ^= T_OP;
+		if (split_msg[1].find("k")  != std::string::npos && server->_channels[chan]->_mode & K_PASS)
+			server->_channels[chan]->_mode ^= K_PASS;
+		if (split_msg[1].find("l")  != std::string::npos && server->_channels[chan]->_mode & U_LIMITS)
+			server->_channels[chan]->_mode ^= U_LIMITS;
+		/*if (split_msg[1].find("o")  != std::string::npos)
+		{
+			if (server->_channels[chan]->_users.find(get_name(split_msg[2])) == server->_channels[chan]->_users.end())
+				send(server->_fds[i].fd, "This user isn't in this channel\n", 33, 0);
+			else
+				server->_channels[chan]->_op.push_back(server->_channels[chan]->_users[get_name(split_msg[2])]);
+		}*/
 	}
 }

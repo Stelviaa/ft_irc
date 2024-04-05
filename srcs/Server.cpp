@@ -6,7 +6,7 @@
 /*   By: luxojr <luxojr@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/21 10:11:22 by sforesti          #+#    #+#             */
-/*   Updated: 2024/04/02 19:09:42 by luxojr           ###   ########.fr       */
+/*   Updated: 2024/04/05 16:22:36 by luxojr           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -151,6 +151,19 @@ void    Server::CheckSocket()
 
 
 /****************    GETTER    ***********************/
+
+int Server::is_Users(std::string _nick)
+{
+	size_t i = 0;
+
+	while (i < this->_users.size())
+	{
+		if (this->_users[i]->getUsername() == _nick)
+			return (i + 1);
+		i ++;
+	}
+	return (0);
+}
 
 int Server::getFd() const
 {
