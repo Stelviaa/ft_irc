@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   User.hpp                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mpelazza <mpelazza@student.42nice.fr>      +#+  +:+       +#+        */
+/*   By: mpelazza <mpelazza@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/21 12:57:16 by sforesti          #+#    #+#             */
-/*   Updated: 2024/04/04 11:23:34 by mpelazza         ###   ########.fr       */
+/*   Updated: 2024/04/05 16:57:36 by mpelazza         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,7 +35,7 @@ class User{
         int getStatus();
         void setStatus(int i);
         std::string getUsername();
-        void parseName(std::string buf);
+        std::string getNickname();
 };
 
 #endif

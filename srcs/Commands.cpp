@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Commands.cpp                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: luxojr <luxojr@student.42.fr>              +#+  +:+       +#+        */
+/*   By: mpelazza <mpelazza@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/31 12:54:49 by luxojr            #+#    #+#             */
-/*   Updated: 2024/04/05 16:26:48 by luxojr           ###   ########.fr       */
+/*   Updated: 2024/04/05 17:37:07 by mpelazza         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,7 +53,7 @@ s_command	commands_parsing(std::string raw_cmd)
 
 	if (!split_cmd.empty() && is_valid_command(split_cmd[0]) == 1)
 	{
-		command.prefix = "";
+		//command.prefix = "";
 		command.cmd = split_cmd[0];
 		command.args.assign(split_cmd.begin() + 1, split_cmd.end());
 	}
@@ -63,8 +63,8 @@ s_command	commands_parsing(std::string raw_cmd)
 		command.cmd = split_cmd[1];
 		command.args.assign(split_cmd.begin() + 2, split_cmd.end());
 	}
-	else
-		command.cmd = "";
+	//else
+	//	command.cmd = "";
 	return (command);
 }
 
@@ -79,9 +79,9 @@ void	commands(Server *server, char buffer[1024], int i)
 	// std::cout << *it << std::endl;
 
 	if (command.cmd.empty())
-			send(server->_fds[i].fd, "Error: invalid command\n", 23, 0);
+		send(server->_fds[i].fd, "Error: invalid command\n", 23, 0);
 	else if (command.cmd == "NICK")
-	 	server->_users[i - 1]->parseName(buffer);
+		nick_cmd(server, command.args, i);
 	else if (command.cmd == "JOIN")
 		join_cmd(server, command.args, i);
 	else if (command.cmd == "QUIT")

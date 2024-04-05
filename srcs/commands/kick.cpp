@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   kick.cpp                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mpelazza <mpelazza@student.42nice.fr>      +#+  +:+       +#+        */
+/*   By: mpelazza <mpelazza@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/31 12:26:14 by luxojr            #+#    #+#             */
-/*   Updated: 2024/04/04 11:28:51 by mpelazza         ###   ########.fr       */
+/*   Updated: 2024/04/05 16:14:40 by mpelazza         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,7 @@ void	kick_cmd(Server *server, std::vector<std::string> splitted, int i)
 	std::string name;
 
 	if (splitted.size() < 2) {
-		send(server->_fds[i].fd, "KICK error: missing parameters\n", 31, 0);
+		err_need_more_params(server, "KICK", i);
 		//<canal> <user> [<comment>]
 		return ;
 	}
@@ -50,13 +50,13 @@ void	kick_cmd(Server *server, std::vector<std::string> splitted, int i)
 					server->_channels[chan]->_users.erase(name);
 				}
 				else
-					send(server->_fds[i].fd, "This user is not in this channel\n", 34, 0);
+					err_user_not_in_chan(server, splitted[1], splitted[0], i);
 			}
 			else
-				send(server->_fds[i].fd, "You are not operator of this channel\n", 38, 0);
+				err_not_operator(server, splitted[0], i);
 		}
 		else
-			send(server->_fds[i].fd, "This channel doesn't exist\n", 28, 0);
+			err_no_such_channel(server, splitted[0], i);
 		send(server->_fds[i].fd, kick_msg.c_str(), kick_msg.length(), 0);
 	}
 }

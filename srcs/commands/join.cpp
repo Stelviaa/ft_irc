@@ -18,7 +18,7 @@ void	join_cmd(Server *server, std::vector<std::string> splitted, int i)
 	std::string	name;
 
 	if (splitted.empty()) {
-		send(server->_fds[i].fd, "JOIN error: missing parameters\n", 31, 0);
+		err_need_more_params(server, "JOIN", i);
 		//<canal>{,<canal>} [<key>{,<key>}]
 		// it can be multiple channel and keys separated by ','
 		return ;
@@ -39,18 +39,18 @@ void	join_cmd(Server *server, std::vector<std::string> splitted, int i)
 			{
 				if (splitted.size() <= 1)
 				{
-					send(server->_fds[i].fd, "You need a password to join this channel\n" , 42, 0);
+					err_cannot_join_chan(server, splitted[0], i, 'i'); //need pass
 					return ;
 				}
 				if (splitted[1] != server->_channels[name]->getPassword())
 				{
-					send(server->_fds[i].fd, "Wrong password\n" , 16, 0);
+					err_cannot_join_chan(server, splitted[0], i, 'k'); //wrong pass
 					return ;
 				}
 			}
 			if ((server->_channels[name]->_mode & U_LIMITS) && (server->_channels[name]->_userLimit >= server->_channels[name]->_users.size()))
 			{
-				send(server->_fds[i].fd, "The channel is full\n", 21, 0);
+				err_cannot_join_chan(server, splitted[0], i, 'l'); //channel full
 				return ;
 			}
 			server->_channels[name]->AddUsers(server->_users[i - 1]);
