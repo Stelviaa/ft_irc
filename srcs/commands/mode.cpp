@@ -33,7 +33,7 @@ t_param	mode_cmd_param_check(Server *server, std::vector<std::string> &split_msg
 	for (size_t k = 0; k < param.mods.size(); k++) {
 		if (param.mods[k] != 'i' && param.mods[k] != 't' && param.mods[k] != 'k' && param.mods[k] != 'l' &&
 			param.mods[k] != 'o' && param.mods[k] != '+' && param.mods[k] != '-') {
-				std::string	err = param.mods[k] + " :is unknow mode char to me\n";
+				std::string	err = param.mods[k] + std::string(" :is unknow mode char to me\n");
 				send(server->_fds[i].fd, err.c_str(), err.size(), 0);
 		}
 	}
