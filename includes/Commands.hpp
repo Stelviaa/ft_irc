@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Commands.hpp                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: luxojr <luxojr@student.42.fr>              +#+  +:+       +#+        */
+/*   By: sforesti <sforesti@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/30 20:25:21 by luxojr            #+#    #+#             */
-/*   Updated: 2024/04/05 18:21:56 by mpelazza         ###   ########.fr       */
+/*   Updated: 2024/04/08 12:21:48 by sforesti         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,7 +27,7 @@ typedef struct s_command
 
 }				t_command;
 
-void	commands(Server *server, char buffer[1024], int i);
+void	commands(Server *server, std::string buffer, int i);
 void	nick_cmd(Server *server, std::vector<std::string> param, int i);
 void	join_cmd(Server *server, std::vector<std::string> splitted, int i);
 void	kick_cmd(Server *server, std::vector<std::string> splitted, int i);

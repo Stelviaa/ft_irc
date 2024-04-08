@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Server.cpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: luxojr <luxojr@student.42.fr>              +#+  +:+       +#+        */
+/*   By: sforesti <sforesti@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/21 10:11:22 by sforesti          #+#    #+#             */
-/*   Updated: 2024/04/07 01:10:32 by luxojr           ###   ########.fr       */
+/*   Updated: 2024/04/04 14:11:50 by sforesti         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -135,12 +135,15 @@ void    Server::CheckSocket()
 			{
 				recv(this->_fds[i].fd, buffer, 1024, 0);
 				this->_users[i - 1]->buffer += buffer;
-				
-				std::cout << "Message du client : " << buffer << std::endl;
-				if ((this->_users[i - 1]->getStatus() == 0 && !this->_pass.empty()))
-					this->log_in(buffer, i);
-				else if (this->_users[i - 1]->getStatus() != 0 || this->_pass.empty())
-					commands(this, buffer, i);
+				if (this->_users[i - 1]->buffer.find("\n") != std::string::npos)
+				{
+					std::cout << "Message du client : " << _users[i - 1]->buffer << std::endl;
+					if (this->_users[i - 1]->getStatus() == 0 && !this->_pass.empty())
+						this->log_in(this->_users[i - 1]->buffer, i);
+					if (this->_users[i - 1]->getStatus() != 0 || this->_pass.empty())
+						commands(this, this->_users[i - 1]->buffer, i);
+					this->_users[i - 1]->buffer = "\0";
+				}
 			}
 			i ++;
 		}
@@ -148,10 +151,6 @@ void    Server::CheckSocket()
 	}
 	this->close_serv();
 }
-
-
-
-
 
 /****************    GETTER    ***********************/
 
