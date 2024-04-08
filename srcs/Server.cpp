@@ -6,7 +6,11 @@
 /*   By: sforesti <sforesti@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/21 10:11:22 by sforesti          #+#    #+#             */
+<<<<<<< Updated upstream
 /*   Updated: 2024/04/04 14:11:50 by sforesti         ###   ########.fr       */
+=======
+/*   Updated: 2024/04/08 12:42:58 by sforesti         ###   ########.fr       */
+>>>>>>> Stashed changes
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -131,18 +135,16 @@ void    Server::CheckSocket()
 			if(this->_fds[i].revents & POLLIN)
 			{
 				recv(this->_fds[i].fd, buffer, 1024, 0);
-				if (std::string(buffer).find('\n') == std::string::npos)
+				this->_users[i - 1]->buffer += buffer;
+				if (this->_users[i - 1]->buffer.find("\n") != std::string::npos)
 				{
-					this->_users[i - 1]->buffer += buffer;
-					continue ;
+					std::cout << "Message du client : " << _users[i - 1]->buffer << std::endl;
+					if (this->_users[i - 1]->getStatus() == 0 && !this->_pass.empty())
+						this->log_in(this->_users[i - 1]->buffer, i);
+					if (this->_users[i - 1]->getStatus() != 0 || this->_pass.empty())
+						commands(this, this->_users[i - 1]->buffer, i);
+					this->_users[i - 1]->buffer = "\0";
 				}
-				std::cout << "Message du client : " << buffer << std::endl;
-				if (this->_users[i - 1]->getStatus() == 0 && !this->_pass.empty())
-					this->log_in(buffer, i);
-				if (this->_users[i - 1]->getStatus() != 0 || this->_pass.empty())
-					commands(this, buffer, i);
-				if (this->_users[i - 1]->buffer.find('\n') != std::string::npos)
-					this->_users[i - 1]->buffer = {0};
 			}
 			i ++;
 		}
