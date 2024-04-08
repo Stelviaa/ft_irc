@@ -6,7 +6,7 @@
 /*   By: luxojr <luxojr@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/01 15:30:05 by luxojr            #+#    #+#             */
-/*   Updated: 2024/04/05 18:22:16 by mpelazza         ###   ########.fr       */
+/*   Updated: 2024/04/06 19:52:47 by luxojr           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,7 +48,7 @@ t_param	mode_cmd_param_check(Server *server, std::vector<std::string> &split_msg
 		param.chan = "";
 		return (param);
 	}
-	if (!server->_channels[param.chan]->is_op(server->_users[i - 1])) {
+	if (server->_channels[param.chan]->is_op(server->_users[i - 1]) == -1) {
 		err_not_operator(server, param.chan, i);
 		param.chan = "";
 		return (param);
@@ -86,22 +86,24 @@ void mode_cmd(Server *server, std::vector<std::string> split_msg, int i)
 				server->_channels[p.chan]->_op.push_back(server->_channels[p.chan]->_users[p.user]);
 		}
 	}
-	if (split_msg[1][0] == '-')
+	if (p.mods[0] == '-')
 	{
-		if (split_msg[1].find("i")  != std::string::npos && server->_channels[chan]->_mode & I_ONLY)
-			server->_channels[chan]->_mode ^= I_ONLY;
-		if (split_msg[1].find("t")  != std::string::npos && server->_channels[chan]->_mode & T_OP)
-			server->_channels[chan]->_mode ^= T_OP;
-		if (split_msg[1].find("k")  != std::string::npos && server->_channels[chan]->_mode & K_PASS)
-			server->_channels[chan]->_mode ^= K_PASS;
-		if (split_msg[1].find("l")  != std::string::npos && server->_channels[chan]->_mode & U_LIMITS)
-			server->_channels[chan]->_mode ^= U_LIMITS;
-		/*if (split_msg[1].find("o")  != std::string::npos)
+		if (p.mods.find("i")  != std::string::npos && server->_channels[p.chan]->_mode & I_ONLY)
+			server->_channels[p.chan]->_mode ^= I_ONLY;
+		if (p.mods.find("t")  != std::string::npos && server->_channels[p.chan]->_mode & T_OP)
+			server->_channels[p.chan]->_mode ^= T_OP;
+		if (p.mods.find("k")  != std::string::npos && server->_channels[p.chan]->_mode & K_PASS)
+			server->_channels[p.chan]->_mode ^= K_PASS;
+		if (p.mods.find("l")  != std::string::npos && server->_channels[p.chan]->_mode & U_LIMITS)
+			server->_channels[p.chan]->_mode ^= U_LIMITS;
+		if (p.mods.find("o")  != std::string::npos)
 		{
-			if (server->_channels[chan]->_users.find(get_name(split_msg[2])) == server->_channels[chan]->_users.end())
-				send(server->_fds[i].fd, "This user isn't in this channel\n", 33, 0);
-			else
-				server->_channels[chan]->_op.push_back(server->_channels[chan]->_users[get_name(split_msg[2])]);
-		}*/
+			int index;
+			if (server->_channels[p.chan]->_users.find(p.user) == server->_channels[p.chan]->_users.end())
+				err_user_not_in_chan(server, p.user, p.chan, i);
+			index = server->_channels[p.chan]->is_op(server->_channels[p.chan]->_users[p.user]);
+			if (index != -1)
+				server->_channels[p.chan]->_op.erase(server->_channels[p.chan]->_op.erase(server->_channels[p.chan]->_op.begin() + index));
+		}
 	}
 }

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   kick.cpp                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mpelazza <mpelazza@student.42.fr>          +#+  +:+       +#+        */
+/*   By: luxojr <luxojr@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/31 12:26:14 by luxojr            #+#    #+#             */
-/*   Updated: 2024/04/05 16:14:40 by mpelazza         ###   ########.fr       */
+/*   Updated: 2024/04/06 19:50:38 by luxojr           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,7 +33,7 @@ void	kick_cmd(Server *server, std::vector<std::string> splitted, int i)
 		kick_msg += "\r\n";
 		if (server->_channels.find(chan) != server->_channels.end())
 		{
-			if (server->_channels[chan]->is_op(server->_users[i - 1]))
+			if (server->_channels[chan]->is_op(server->_users[i - 1]) != -1)
 			{
 				if (server->_channels[chan]->_users.find(name) != server->_channels[chan]->_users.end())
 				{

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   topic.cpp                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mpelazza <mpelazza@student.42.fr>          +#+  +:+       +#+        */
+/*   By: luxojr <luxojr@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/01 15:08:43 by luxojr            #+#    #+#             */
-/*   Updated: 2024/04/05 17:12:47 by mpelazza         ###   ########.fr       */
+/*   Updated: 2024/04/06 19:51:01 by luxojr           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,7 +39,7 @@ void	topic_cmd(Server *server, std::vector<std::string> split_msg, int i)
 	}
 	if (split_msg.size() >= 2)
 	{
-		if ((server->_channels[chan]->_mode & T_OP) && !server->_channels[chan]->is_op(server->_users[i - 1]))
+		if ((server->_channels[chan]->_mode & T_OP) && server->_channels[chan]->is_op(server->_users[i - 1]) == -1)
 		{
 			err_not_operator(server, split_msg[0], i);
 			return ;

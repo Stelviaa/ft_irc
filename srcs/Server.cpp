@@ -6,7 +6,7 @@
 /*   By: luxojr <luxojr@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/21 10:11:22 by sforesti          #+#    #+#             */
-/*   Updated: 2024/04/05 16:22:36 by luxojr           ###   ########.fr       */
+/*   Updated: 2024/04/07 01:10:32 by luxojr           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -92,7 +92,7 @@ void	Server::log_in(std::string buffer, int i)
 	index = find_index(msg, "PASS");
 	if (index != -1)
 	{
-		if (size_t(index) != msg.size() - 1 && msg[index + 1].find(this->_pass) != std::string::npos)
+		if (size_t(index) != msg.size() - 1 && msg[index + 1] != this->_pass)
 		{
 			this->_users[i - 1]->setStatus(1);
 			response = "Connection Successful\n";
@@ -103,12 +103,15 @@ void	Server::log_in(std::string buffer, int i)
 			response = "Wrong password try again\n";
 			send(this->_fds[i].fd, response.c_str(), response.length(), 0);
 		}
+		return ;
 	}
-	else
+	else if (this->_users[i - 1]->getStatus() == 0 && !this->_pass.empty())
 	{
 		response = "You have to connect using the command : PASS <password>\n";
 		send(this->_fds[i].fd, response.c_str(), response.length(), 0);
+		return ;
 	}
+
 }
 
 void    Server::CheckSocket()
@@ -134,9 +137,9 @@ void    Server::CheckSocket()
 				this->_users[i - 1]->buffer += buffer;
 				
 				std::cout << "Message du client : " << buffer << std::endl;
-				if (this->_users[i - 1]->getStatus() == 0 && !this->_pass.empty())
+				if ((this->_users[i - 1]->getStatus() == 0 && !this->_pass.empty()))
 					this->log_in(buffer, i);
-				if (this->_users[i - 1]->getStatus() != 0 || this->_pass.empty())
+				else if (this->_users[i - 1]->getStatus() != 0 || this->_pass.empty())
 					commands(this, buffer, i);
 			}
 			i ++;

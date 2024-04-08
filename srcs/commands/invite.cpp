@@ -6,7 +6,7 @@
 /*   By: luxojr <luxojr@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/01 15:08:45 by luxojr            #+#    #+#             */
-/*   Updated: 2024/04/05 16:31:51 by luxojr           ###   ########.fr       */
+/*   Updated: 2024/04/06 19:50:28 by luxojr           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,7 +45,7 @@ void	invite_cmd(Server *server, std::vector<std::string> split_msg, int i)
 			send(server->_fds[i].fd, err_message.c_str(), err_message.size(), 0);
 			return ;
 		}
-		if (server->_channels[split_msg[1]]->_mode & I_ONLY && !server->_channels[split_msg[1]]->is_op(server->_users[i - 1]))
+		if (server->_channels[split_msg[1]]->_mode & I_ONLY && server->_channels[split_msg[1]]->is_op(server->_users[i - 1]) == -1)
 		{
 			err_message += split_msg[1];
 			err_message += " :You're not channel operator\n";
