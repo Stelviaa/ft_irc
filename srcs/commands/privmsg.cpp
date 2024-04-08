@@ -6,39 +6,46 @@
 /*   By: luxojr <luxojr@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/29 12:43:37 by mboyer            #+#    #+#             */
-/*   Updated: 2024/04/01 09:28:48 by luxojr           ###   ########.fr       */
+/*   Updated: 2024/04/05 16:58:56 by mpelazza         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/Commands.hpp"
 #include <map>
 
-void	privmsg_cmd(Server *server, std::string buffer, int i)
+void	privmsg_cmd(Server *server, std::vector<std::string> param, int i)
 {
-	if (std::string(buffer).find(":") != std::string::npos)
-		send_all_fd(server, buffer, i);
+	if (param.empty()) {
+		send(server->_fds[i].fd, ":No recipient given (PRIVMSG)\n", 30, 0);
+		return ;
+	}
+	if (param.size() < 2)
+		send(server->_fds[i].fd, ":No text to send\n", 16, 0);
+	// param[0] == <destinataire>{,<destinataire>}, erreur si duplicata
+	if (std::string(param[1]).find(":") != std::string::npos)
+		send_all_fd(server, param, i);
 }
 
-void send_all_fd(Server *server, std::string msg, int i)
+void send_all_fd(Server *server, std::vector<std::string> split_msg, int i)
 {
 	int n = 1;
-	std::vector<std::string> split_msg;
 	std::string join_response = ":";
 	
 	join_response += server->_users[i - 1]->getUsername();
-	join_response += " ";
-	join_response += msg;
-	split_msg = ft_split(msg, ' ');
+	join_response += " PRIVMSG ";
+	join_response += split_msg[0];
+	join_response += ' ';
+	join_response += split_msg[1];
+	join_response += '\n';
 
-	std::string target = split_msg[1];
+	std::string target = split_msg[0];
 	if (target[0] == '#')
 	{
 		std::map<std::string, User *>::iterator it = server->_channels[target]->_users.begin();
 		while (it != server->_channels[target]->_users.end())
 		{
-			std::cout << it->second->_id << std::endl;
-			if (it->second->_id != i - 1)
-				send(server->_fds[it->second->_id + 1].fd, join_response.c_str(), join_response.length(), 0);
+			if (it->second->_id != i)
+				send(server->_fds[it->second->_id].fd, join_response.c_str(), join_response.length(), 0);
 			it ++;
 		}
 	}

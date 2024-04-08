@@ -6,7 +6,7 @@
 /*   By: luxojr <luxojr@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/21 13:00:10 by sforesti          #+#    #+#             */
-/*   Updated: 2024/04/02 19:08:58 by luxojr           ###   ########.fr       */
+/*   Updated: 2024/04/06 20:20:12 by luxojr           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,19 +17,7 @@
 User::User(){
     this->_status = 0;
     this->buffer = "";
-}
-
-void    User::parseName(std::string buf)
-{
-    size_t start;
-
-    start = buf.find("NICK") + 5;
-    std::string name;
-    name = buf.substr(start, buf.size() - start);
-    if (name.find('\r') != std::string::npos)
-        this->_username = name.substr(0, name.find('\r'));
-    else if (name.find('\n') != std::string::npos)
-        this->_username = name.substr(0, name.find('\n'));
+    this->_username = "";
 }
 
 int User::setFd(int value){
@@ -39,9 +27,18 @@ int User::setFd(int value){
     return (value);
 }
 
+void    User::setUsername(std::string username){
+    _username = username;
+}
+
 std::string User::getUsername()
 {
     return (this->_username);
+}
+
+std::string User::getNickname()
+{
+    return (this->_nickname);
 }
 
 int User::getStatus()

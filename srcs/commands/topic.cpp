@@ -6,39 +6,44 @@
 /*   By: luxojr <luxojr@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/01 15:08:43 by luxojr            #+#    #+#             */
-/*   Updated: 2024/04/03 01:53:34 by luxojr           ###   ########.fr       */
+/*   Updated: 2024/04/06 19:51:01 by luxojr           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/Commands.hpp"
 
-void	topic_cmd(Server *server, std::string buffer, int i)
+void	topic_cmd(Server *server, std::vector<std::string> split_msg, int i)
 {
-	std::vector<std::string> split_msg;
-
-	split_msg = ft_split(buffer, ' ');
-	std::string chan = get_name(split_msg[1]);
-	if (server->_channels.find(chan) == server->_channels.end())
-	{
-		send(server->_fds[i].fd, "This channel doesn't exist\n", 28, 0);
+	if (split_msg.empty()) {
+		err_need_more_params(server, "TOPIC", i);
+		//<canal> [<sujet>]
 		return ;
 	}
-	if (split_msg.size() == 2)
+	std::string chan = split_msg[0];
+	if (server->_channels.find(chan) == server->_channels.end())
+	{
+		err_no_such_channel(server, split_msg[0], i);
+		return ;
+	}
+	if (split_msg.size() == 1)
 	{
 		if (!server->_channels[chan]->_topic.empty())
 		{
 			send(server->_fds[i].fd, server->_channels[chan]->_topic.c_str(), server->_channels[chan]->_topic.size(), 0);
 		}
 		else
-			send(server->_fds[i].fd, "This channel don't have any topic\n", 35, 0);
-	}
-	if (split_msg.size() == 3)
-	{
-		if ((server->_channels[chan]->_mode & T_OP) && !server->_channels[chan]->is_op(server->_users[i - 1]))
 		{
-			send(server->_fds[i].fd, "You are not operator on this channel\n", 38, 0);
+			std::string	err = split_msg[0] + " :No topic is set\n";
+			send(server->_fds[i].fd, err.c_str(), err.size(), 0);
+		}
+	}
+	if (split_msg.size() >= 2)
+	{
+		if ((server->_channels[chan]->_mode & T_OP) && server->_channels[chan]->is_op(server->_users[i - 1]) == -1)
+		{
+			err_not_operator(server, split_msg[0], i);
 			return ;
 		}
-		server->_channels[chan]->_topic = split_msg[2];
+		server->_channels[chan]->_topic = split_msg[1];
 	}
 }

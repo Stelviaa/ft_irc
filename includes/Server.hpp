@@ -6,7 +6,7 @@
 /*   By: luxojr <luxojr@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/21 10:32:47 by sforesti          #+#    #+#             */
-/*   Updated: 2024/03/31 22:17:43 by luxojr           ###   ########.fr       */
+/*   Updated: 2024/04/05 15:28:45 by luxojr           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,6 +42,7 @@ class Server
         struct sockaddr_in *getAddress();
         void    close_serv();
         void    log_in(std::string buffer, int i);
+        int     is_Users(std::string _nick);
         int getNbUsers();
         int *getLenAddress();
         void RemoveUser();

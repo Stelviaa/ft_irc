@@ -6,7 +6,7 @@
 /*   By: luxojr <luxojr@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/30 17:08:42 by luxojr            #+#    #+#             */
-/*   Updated: 2024/04/01 23:39:44 by luxojr           ###   ########.fr       */
+/*   Updated: 2024/04/06 19:49:48 by luxojr           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,10 +32,10 @@ int	Channel::is_op(User *usr)
 	while (i < this->_op.size())
 	{
 		if (this->_op[i] == usr)
-			return (1);
+			return (i);
 		i ++;
 	}
-	return (0);
+	return (-1);
 }
 
 void	Channel::setPassword(std::string pass)

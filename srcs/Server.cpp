@@ -6,11 +6,7 @@
 /*   By: sforesti <sforesti@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/21 10:11:22 by sforesti          #+#    #+#             */
-<<<<<<< Updated upstream
 /*   Updated: 2024/04/04 14:11:50 by sforesti         ###   ########.fr       */
-=======
-/*   Updated: 2024/04/08 12:42:58 by sforesti         ###   ########.fr       */
->>>>>>> Stashed changes
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -96,7 +92,7 @@ void	Server::log_in(std::string buffer, int i)
 	index = find_index(msg, "PASS");
 	if (index != -1)
 	{
-		if (size_t(index) != msg.size() - 1 && msg[index + 1].find(this->_pass) != std::string::npos)
+		if (size_t(index) != msg.size() - 1 && msg[index + 1] != this->_pass)
 		{
 			this->_users[i - 1]->setStatus(1);
 			response = "Connection Successful\n";
@@ -107,12 +103,15 @@ void	Server::log_in(std::string buffer, int i)
 			response = "Wrong password try again\n";
 			send(this->_fds[i].fd, response.c_str(), response.length(), 0);
 		}
+		return ;
 	}
-	else
+	else if (this->_users[i - 1]->getStatus() == 0 && !this->_pass.empty())
 	{
 		response = "You have to connect using the command : PASS <password>\n";
 		send(this->_fds[i].fd, response.c_str(), response.length(), 0);
+		return ;
 	}
+
 }
 
 void    Server::CheckSocket()
@@ -154,6 +153,19 @@ void    Server::CheckSocket()
 }
 
 /****************    GETTER    ***********************/
+
+int Server::is_Users(std::string _nick)
+{
+	size_t i = 0;
+
+	while (i < this->_users.size())
+	{
+		if (this->_users[i]->getUsername() == _nick)
+			return (i + 1);
+		i ++;
+	}
+	return (0);
+}
 
 int Server::getFd() const
 {
