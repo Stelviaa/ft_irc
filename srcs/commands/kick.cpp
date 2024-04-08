@@ -6,7 +6,7 @@
 /*   By: luxojr <luxojr@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/31 12:26:14 by luxojr            #+#    #+#             */
-/*   Updated: 2024/04/06 19:50:38 by luxojr           ###   ########.fr       */
+/*   Updated: 2024/04/08 14:59:36 by luxojr           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,7 +27,7 @@ void	kick_cmd(Server *server, std::vector<std::string> splitted, int i)
 		chan = get_name(splitted[0]);
 		name = get_name(splitted[1]);
 		std::string kick_msg = ":";
-		kick_msg += server->_users[i - 1]->getUsername();
+		kick_msg += server->_users[i - 1]->getNickname();
 		kick_msg += " KICK ";
 		kick_msg += chan;
 		kick_msg += "\r\n";

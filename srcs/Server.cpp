@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Server.cpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: sforesti <sforesti@student.42.fr>          +#+  +:+       +#+        */
+/*   By: luxojr <luxojr@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/21 10:11:22 by sforesti          #+#    #+#             */
-/*   Updated: 2024/04/04 14:11:50 by sforesti         ###   ########.fr       */
+/*   Updated: 2024/04/08 15:00:43 by luxojr           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -140,7 +140,7 @@ void    Server::CheckSocket()
 					std::cout << "Message du client : " << _users[i - 1]->buffer << std::endl;
 					if (this->_users[i - 1]->getStatus() == 0 && !this->_pass.empty())
 						this->log_in(this->_users[i - 1]->buffer, i);
-					if (this->_users[i - 1]->getStatus() != 0 || this->_pass.empty())
+					else if (this->_users[i - 1]->getStatus() != 0 || this->_pass.empty())
 						commands(this, this->_users[i - 1]->buffer, i);
 					this->_users[i - 1]->buffer = "\0";
 				}
@@ -160,7 +160,7 @@ int Server::is_Users(std::string _nick)
 
 	while (i < this->_users.size())
 	{
-		if (this->_users[i]->getUsername() == _nick)
+		if (this->_users[i]->getNickname() == _nick)
 			return (i + 1);
 		i ++;
 	}

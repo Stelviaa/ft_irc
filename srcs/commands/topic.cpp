@@ -6,7 +6,7 @@
 /*   By: luxojr <luxojr@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/01 15:08:43 by luxojr            #+#    #+#             */
-/*   Updated: 2024/04/06 19:51:01 by luxojr           ###   ########.fr       */
+/*   Updated: 2024/04/08 15:03:38 by luxojr           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,6 +44,7 @@ void	topic_cmd(Server *server, std::vector<std::string> split_msg, int i)
 			err_not_operator(server, split_msg[0], i);
 			return ;
 		}
-		server->_channels[chan]->_topic = split_msg[1];
+		server->_channels[chan]->_topic = split_msg[1] + "\n";
+
 	}
 }

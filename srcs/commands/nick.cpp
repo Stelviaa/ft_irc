@@ -6,7 +6,7 @@
 /*   By: luxojr <luxojr@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/29 12:44:10 by mboyer            #+#    #+#             */
-/*   Updated: 2024/04/06 20:16:37 by luxojr           ###   ########.fr       */
+/*   Updated: 2024/04/08 15:00:43 by luxojr           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,7 +25,7 @@ int is_non_ascii(const std::string & str)
 int	is_in_use(Server *server, const std::string nickname)
 {
 	 for (std::vector<User *>::iterator it = server->_users.begin(); it != server->_users.end(); ++it) {
-		if (nickname == (*it)->getUsername())
+		if (nickname == (*it)->getNickname())
 			return (1);
 	 }
 	 return (0);
@@ -48,5 +48,5 @@ void	nick_cmd(Server *server, std::vector<std::string> param, int i)
 		send(server->_fds[i].fd, err.c_str(), err.size(), 0);
 		return ;
 	}
-	server->_users[i - 1]->setUsername(param[0]);
+	server->_users[i - 1]->setNickname(param[0]);
 }

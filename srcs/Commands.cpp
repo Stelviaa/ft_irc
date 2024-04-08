@@ -6,7 +6,7 @@
 /*   By: luxojr <luxojr@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/31 12:54:49 by luxojr            #+#    #+#             */
-/*   Updated: 2024/04/07 01:11:36 by luxojr           ###   ########.fr       */
+/*   Updated: 2024/04/08 14:53:22 by luxojr           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -69,7 +69,7 @@ s_command	commands_parsing(std::string raw_cmd)
 	return (command);
 }
 
-void	commands(Server *server, char buffer[1024], int i)
+void	commands(Server *server, std::string buffer, int i)
 {
 	t_command	command = commands_parsing(std::string(buffer));
 

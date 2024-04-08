@@ -6,7 +6,7 @@
 /*   By: luxojr <luxojr@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/29 12:43:37 by mboyer            #+#    #+#             */
-/*   Updated: 2024/04/05 16:58:56 by mpelazza         ###   ########.fr       */
+/*   Updated: 2024/04/08 15:00:43 by luxojr           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,7 +31,7 @@ void send_all_fd(Server *server, std::vector<std::string> split_msg, int i)
 	int n = 1;
 	std::string join_response = ":";
 	
-	join_response += server->_users[i - 1]->getUsername();
+	join_response += server->_users[i - 1]->getNickname();
 	join_response += " PRIVMSG ";
 	join_response += split_msg[0];
 	join_response += ' ';
@@ -53,7 +53,7 @@ void send_all_fd(Server *server, std::vector<std::string> split_msg, int i)
 	{
 		while (n <= server->getNbUsers())
 		{
-			if (n != i && (server->_users[n - 1]->getUsername() == target))
+			if (n != i && (server->_users[n - 1]->getNickname() == target))
 				send(server->_fds[n].fd, join_response.c_str(), join_response.length(), 0);
 			n ++;
 		}

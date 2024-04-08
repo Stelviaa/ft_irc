@@ -6,7 +6,7 @@
 /*   By: luxojr <luxojr@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/21 13:00:10 by sforesti          #+#    #+#             */
-/*   Updated: 2024/04/06 20:20:12 by luxojr           ###   ########.fr       */
+/*   Updated: 2024/04/08 15:01:20 by luxojr           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,6 +29,10 @@ int User::setFd(int value){
 
 void    User::setUsername(std::string username){
     _username = username;
+}
+
+void    User::setNickname(std::string nickname){
+    _nickname = nickname;
 }
 
 std::string User::getUsername()

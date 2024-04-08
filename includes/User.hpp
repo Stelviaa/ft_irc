@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   User.hpp                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mpelazza <mpelazza@student.42.fr>          +#+  +:+       +#+        */
+/*   By: luxojr <luxojr@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/21 12:57:16 by sforesti          #+#    #+#             */
-/*   Updated: 2024/04/05 16:57:36 by mpelazza         ###   ########.fr       */
+/*   Updated: 2024/04/08 15:01:11 by luxojr           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,6 +31,7 @@ class User{
         std::string buffer;
         int setFd(int value);
         void setUsername(std::string username);
+        void setNickname(std::string nickname);
         int getFd() const;
         int getStatus();
         void setStatus(int i);
