@@ -105,7 +105,7 @@ void	Server::log_in(std::string buffer, int i)
 		}
 		return ;
 	}
-	else if (this->_users[i - 1]->getStatus() == 0 && !this->_pass.empty() && buffer.substr(0,3) != "CAP")
+	else if (this->_users[i - 1]->getStatus() == 0 && !this->_pass.empty())
 	{
 		response = "You have to connect using the command : PASS <password>\n";
 		send(this->_fds[i].fd, response.c_str(), response.length(), 0);
@@ -141,15 +141,21 @@ void    Server::CheckSocket()
 					{
 						size_t newline = this->_users[i - 1]->buffer.find('\n');
 						std::string cmd = this->_users[i - 1]->buffer.substr(0, newline + 1);
+						if (cmd.substr(0, 3) == "CAP")
+						{
+							this->_users[i - 1]->buffer = this->_users[i - 1]->buffer.substr(newline + 1);
+							continue ;
+						}
 						std::cout << "Message du client : " << cmd << std::endl;
 						if (this->_users[i - 1]->getStatus() == 0 && !this->_pass.empty())
-							this->log_in(this->_users[i - 1]->buffer, i);
+							this->log_in(cmd, i);
 						else if (this->_users[i - 1]->getStatus() != 0 || this->_pass.empty())
 							commands(this, cmd, i);
 						this->_users[i - 1]->buffer = this->_users[i - 1]->buffer.substr(newline + 1);
-						std::cout << this->_users[i - 1]->buffer << std::endl;
 					}
 				}
+				//if (this->_fds[i].revents & POLLRDHUP)
+					//std::cout << "yeah yeah" << std::endl;
 			}
 			i ++;
 		}

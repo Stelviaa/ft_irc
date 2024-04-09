@@ -16,7 +16,7 @@ int	is_valid_command(std::string cmd)
 {
 	if (cmd == "NICK" || cmd == "JOIN" || cmd == "QUIT" || cmd == "PRIVMSG" ||
 		cmd == "KICK" || cmd == "TOPIC" || cmd == "MODE" || cmd == "INVITE" || 
-    	cmd == "CAP" || cmd == "USER")
+    	cmd == "USER")
 		return (1);
 	return (0);
 }
