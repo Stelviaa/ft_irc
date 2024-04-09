@@ -92,7 +92,7 @@ void	Server::log_in(std::string buffer, int i)
 	index = find_index(msg, "PASS");
 	if (index != -1)
 	{
-		if (size_t(index) != msg.size() - 1 && msg[index + 1] != this->_pass)
+		if (size_t(index) != msg.size() - 1 && (!msg[index + 1].compare(this->_pass + "\n") || !msg[index + 1].compare(this->_pass + "\r\n")))
 		{
 			this->_users[i - 1]->setStatus(1);
 			response = "Connection Successful\n";
