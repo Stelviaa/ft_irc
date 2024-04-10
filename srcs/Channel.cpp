@@ -6,7 +6,7 @@
 /*   By: luxojr <luxojr@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/30 17:08:42 by luxojr            #+#    #+#             */
-/*   Updated: 2024/04/08 15:00:43 by luxojr           ###   ########.fr       */
+/*   Updated: 2024/04/08 18:45:39 by luxojr           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,6 +16,7 @@ Channel::Channel(std::string name, User *op) : _name(name)
 {
 	this->_op.push_back(op);
 	this->_users[op->getNickname()] = op;
+	op->_channels.push_back(name);
 	this->_topic = "";
 	this->_mode = 0;
 }

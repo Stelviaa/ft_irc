@@ -6,7 +6,7 @@
 /*   By: luxojr <luxojr@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/21 13:00:10 by sforesti          #+#    #+#             */
-/*   Updated: 2024/04/08 15:01:20 by luxojr           ###   ########.fr       */
+/*   Updated: 2024/04/10 02:03:09 by luxojr           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,6 +38,22 @@ void    User::setNickname(std::string nickname){
 std::string User::getUsername()
 {
     return (this->_username);
+}
+
+void User::removeChannel(std::string chan)
+{
+    std::vector<std::string>::iterator it;
+
+    it = this->_channels.begin();
+    while (it != this->_channels.end())
+    {
+        if (*it == chan)
+        {
+            this->_channels.erase(it);
+            return ;
+        }
+        it ++;
+    }
 }
 
 std::string User::getNickname()

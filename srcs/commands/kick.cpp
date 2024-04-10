@@ -6,7 +6,7 @@
 /*   By: luxojr <luxojr@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/31 12:26:14 by luxojr            #+#    #+#             */
-/*   Updated: 2024/04/08 14:59:36 by luxojr           ###   ########.fr       */
+/*   Updated: 2024/04/10 02:03:25 by luxojr           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,6 +48,7 @@ void	kick_cmd(Server *server, std::vector<std::string> splitted, int i)
 					else
 						send(server->_fds[server->_channels[chan]->_users[name]->_id].fd, "You have been kicked\n", 22, 0);
 					server->_channels[chan]->_users.erase(name);
+					server->_users[server->is_Users(name)]->removeChannel(chan);
 				}
 				else
 					err_user_not_in_chan(server, splitted[1], splitted[0], i);
