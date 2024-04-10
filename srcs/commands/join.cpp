@@ -3,15 +3,37 @@
 /*                                                        :::      ::::::::   */
 /*   join.cpp                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mpelazza <mpelazza@student.42.fr>          +#+  +:+       +#+        */
+/*   By: luxojr <luxojr@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/29 12:43:14 by mboyer            #+#    #+#             */
-/*   Updated: 2024/04/08 18:44:32 by luxojr           ###   ########.fr       */
+/*   Updated: 2024/04/10 14:35:05 by luxojr           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/Commands.hpp"
 #include "../../includes/irc.hpp"
+
+void	join_rpl(Server *server, int i, std::string name)
+{
+	if (!server->_channels[name]->_topic.empty())
+	{
+		std::string topic =  name + " :" + server->_channels[name]->_topic; 
+		send(server->_fds[i].fd, topic.c_str(), topic.size(), 0);
+	}
+	else
+	{
+		std::string	err = name + " :No topic is set\n";
+		send(server->_fds[i].fd, err.c_str(), err.size(), 0);
+	}
+	std::string names = name + " :";
+	std::map<std::string, User *>::iterator it = server->_channels[name]->_users.begin();
+	while (it != server->_channels[name]->_users.end())
+	{
+		names += it->first + " ";
+		it ++;
+	}
+	send(server->_fds[i].fd, names.c_str(), names.size(), 0);
+}
 
 void	process_join_cmd(Server *server, std::vector<std::string> splitted, int i)
 {
@@ -48,7 +70,7 @@ void	process_join_cmd(Server *server, std::vector<std::string> splitted, int i)
 			server->_channels[name]->AddUsers(server->_users[i - 1]);
 			server->_users[i - 1]->_channels.push_back(name);
 		}
-		send(server->_fds[i].fd, join_response.c_str(), join_response.length(), 0);
+		join_rpl(server, i, name);
 	}
 }
 
