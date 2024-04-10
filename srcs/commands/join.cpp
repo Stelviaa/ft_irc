@@ -6,7 +6,7 @@
 /*   By: mpelazza <mpelazza@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/29 12:43:14 by mboyer            #+#    #+#             */
-/*   Updated: 2024/04/09 14:23:01 by mpelazza         ###   ########.fr       */
+/*   Updated: 2024/04/08 18:44:32 by luxojr           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,6 +46,7 @@ void	process_join_cmd(Server *server, std::vector<std::string> splitted, int i)
 				return ;
 			}
 			server->_channels[name]->AddUsers(server->_users[i - 1]);
+			server->_users[i - 1]->_channels.push_back(name);
 		}
 		send(server->_fds[i].fd, join_response.c_str(), join_response.length(), 0);
 	}

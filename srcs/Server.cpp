@@ -6,7 +6,7 @@
 /*   By: luxojr <luxojr@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/21 10:11:22 by sforesti          #+#    #+#             */
-/*   Updated: 2024/04/08 15:00:43 by luxojr           ###   ########.fr       */
+/*   Updated: 2024/04/08 18:40:04 by luxojr           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -133,8 +133,9 @@ void    Server::CheckSocket()
 		{
 			if(this->_fds[i].revents & POLLIN)
 			{
-				recv(this->_fds[i].fd, buffer, 1024, 0);
-				this->_users[i - 1]->buffer += std::string(buffer);
+				int f = recv(this->_fds[i].fd, buffer, 1024, 0);
+				std::cout << f << std::endl;
+				this->_users[i - 1]->buffer += buffer;
 				if (this->_users[i - 1]->buffer.find("\n") != std::string::npos)
 				{
 					while (this->_users[i - 1]->buffer.find("\n") != std::string::npos)
@@ -154,9 +155,20 @@ void    Server::CheckSocket()
 						this->_users[i - 1]->buffer = this->_users[i - 1]->buffer.substr(newline + 1);
 					}
 				}
-				//if (this->_fds[i].revents & POLLRDHUP)
-					//std::cout << "yeah yeah" << std::endl;
+				if (f == 0)
+				{
+					delete this->_users[i - 1];
+					if (i != this->getNbUsers())
+					{
+						this->_users[i -1] = this->_users[this->getNbUsers() - 1];
+						this->_users[i - 1]->_id = i - 1;
+						this->_users[this->getNbUsers() - 1] = 0;
+						this->_fds[i] = this->_fds[this->getNbUsers()];
+					}
+					this->RemoveUser();
+				}
 			}
+
 			i ++;
 		}
 		i = 1;
