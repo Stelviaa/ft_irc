@@ -3,30 +3,22 @@
 /*                                                        :::      ::::::::   */
 /*   join.cpp                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: luxojr <luxojr@student.42.fr>              +#+  +:+       +#+        */
+/*   By: mpelazza <mpelazza@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/29 12:43:14 by mboyer            #+#    #+#             */
-/*   Updated: 2024/04/08 15:00:43 by luxojr           ###   ########.fr       */
+/*   Updated: 2024/04/09 14:23:01 by mpelazza         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/Commands.hpp"
 #include "../../includes/irc.hpp"
 
-void	join_cmd(Server *server, std::vector<std::string> splitted, int i)
+void	process_join_cmd(Server *server, std::vector<std::string> splitted, int i)
 {
-	std::string	name;
-
-	if (splitted.empty()) {
-		err_need_more_params(server, "JOIN", i);
-		//<canal>{,<canal>} [<key>{,<key>}]
-		// it can be multiple channel and keys separated by ','
-		return ;
-	}
 	if (splitted[0][0] == '#')
 	{
-		name = splitted[0];
-		std::string join_response = ":";
+		std::string	name = splitted[0];
+		std::string	join_response = ":";
 		join_response += server->_users[i - 1]->getNickname();
 		join_response += " JOIN ";
 		join_response += name;
@@ -57,4 +49,30 @@ void	join_cmd(Server *server, std::vector<std::string> splitted, int i)
 		}
 		send(server->_fds[i].fd, join_response.c_str(), join_response.length(), 0);
 	}
+}
+
+void	join_cmd(Server *server, std::vector<std::string> splitted, int i)
+{
+	std::string	name;
+
+	if (splitted.empty()) {
+		err_need_more_params(server, "JOIN", i);
+		return ;
+	}
+	if (splitted[0].find(',') != std::string::npos) {
+		std::istringstream	iss1(splitted[0]);
+		std::string			word;
+		while (std::getline(iss1, word, ',')) {
+			std::vector<std::string> tmp;
+			tmp.push_back(word);
+			if (splitted.size() > 1 && !splitted[1].empty()) {
+				std::istringstream	iss2(splitted[1]);
+				std::getline(iss2, word, ',');
+				tmp.push_back(word);
+			}
+			process_join_cmd(server, tmp, i);
+		}
+	}
+	else
+		process_join_cmd(server, splitted, i);
 }
