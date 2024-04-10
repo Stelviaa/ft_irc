@@ -6,7 +6,7 @@
 /*   By: luxojr <luxojr@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/31 12:54:49 by luxojr            #+#    #+#             */
-/*   Updated: 2024/04/08 14:53:22 by luxojr           ###   ########.fr       */
+/*   Updated: 2024/04/10 14:53:52 by luxojr           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -96,12 +96,12 @@ void	commands(Server *server, std::string buffer, int i)
 		delete server->_users[i - 1];
 		if (i != server->getNbUsers())
 		{
-			server->_users[i -1] = server->_users[server->getNbUsers() - 1];
+			server->_users[i - 1] = server->_users[server->getNbUsers() - 1];
 			server->_users[i - 1]->_id = i - 1;
 			server->_users[server->getNbUsers() - 1] = 0;
 			server->_fds[i] = server->_fds[server->getNbUsers()];
 		}
-		server->RemoveUser();
+		server->kickUser(i - 1);
 	}
 	else if (command.cmd == "PRIVMSG")
 		privmsg_cmd(server, command.args, i);

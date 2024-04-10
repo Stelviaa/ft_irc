@@ -6,7 +6,7 @@
 /*   By: luxojr <luxojr@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/21 10:32:47 by sforesti          #+#    #+#             */
-/*   Updated: 2024/04/05 15:28:45 by luxojr           ###   ########.fr       */
+/*   Updated: 2024/04/10 14:49:39 by luxojr           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,6 +39,7 @@ class Server
         std::vector<User *>   _users;
         std::map<std::string , Channel *>   _channels;
         int getFd() const;
+        void kickUser(int id);
         struct sockaddr_in *getAddress();
         void    close_serv();
         void    log_in(std::string buffer, int i);
