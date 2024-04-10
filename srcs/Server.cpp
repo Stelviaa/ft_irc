@@ -6,7 +6,7 @@
 /*   By: luxojr <luxojr@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/21 10:11:22 by sforesti          #+#    #+#             */
-/*   Updated: 2024/04/10 14:53:14 by luxojr           ###   ########.fr       */
+/*   Updated: 2024/04/10 17:51:57 by luxojr           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -148,15 +148,13 @@ void    Server::CheckSocket()
 							continue ;
 						}
 						std::cout << "Message du client : " << cmd << std::endl;
-						if (this->_users[i - 1]->getStatus() == 0 && !this->_pass.empty())
-							this->log_in(cmd, i);
-						else if (this->_users[i - 1]->getStatus() != 0 || this->_pass.empty())
-							commands(this, cmd, i);
+						commands(this, cmd, i);
 						this->_users[i - 1]->buffer = this->_users[i - 1]->buffer.substr(newline + 1);
 					}
 				}
 				if (f == 0)
 				{
+					this->kickUser(i - 1);
 					delete this->_users[i - 1];
 					if (i != this->getNbUsers())
 					{
@@ -165,7 +163,7 @@ void    Server::CheckSocket()
 						this->_users[this->getNbUsers() - 1] = 0;
 						this->_fds[i] = this->_fds[this->getNbUsers()];
 					}
-					this->kickUser(i - 1);
+					this->RemoveUser();
 				}
 			}
 
@@ -186,7 +184,6 @@ void	Server::kickUser(int id)
 		this->_channels[chan]->_users.erase(name);
 		i ++;
 	}
-	this->RemoveUser();
 }
 
 /****************    GETTER    ***********************/

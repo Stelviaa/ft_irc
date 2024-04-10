@@ -6,7 +6,7 @@
 /*   By: luxojr <luxojr@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/31 12:54:49 by luxojr            #+#    #+#             */
-/*   Updated: 2024/04/10 14:53:52 by luxojr           ###   ########.fr       */
+/*   Updated: 2024/04/10 17:56:35 by luxojr           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,7 @@ int	is_valid_command(std::string cmd)
 {
 	if (cmd == "NICK" || cmd == "JOIN" || cmd == "QUIT" || cmd == "PRIVMSG" ||
 		cmd == "KICK" || cmd == "TOPIC" || cmd == "MODE" || cmd == "INVITE" || 
-    	cmd == "USER")
+    	cmd == "USER" || cmd == "PASS")
 		return (1);
 	return (0);
 }
@@ -81,6 +81,15 @@ void	commands(Server *server, std::string buffer, int i)
 
 	if (command.cmd.empty())
 		send(server->_fds[i].fd, "Error: invalid command\n", 23, 0);
+	else if (command.cmd == "QUIT")
+		quit_cmd(server, command.args, i);
+	else if (command.cmd == "PASS")
+		pass_cmd(server, command.args, i);
+	else if (server->_users[i - 1]->getStatus() == 0 && !server->_pass.empty())
+	{
+		send(server->_fds[i].fd, "You have to connect using the command : PASS <password>\n", 57, 0);
+		return ;
+	}
 	else if (command.cmd == "NICK")
 		nick_cmd(server, command.args, i);
 	else if (server->_users[i - 1]->getNickname().empty())
@@ -90,19 +99,6 @@ void	commands(Server *server, std::string buffer, int i)
 	}
 	else if (command.cmd == "JOIN")
 		join_cmd(server, command.args, i);
-	else if (command.cmd == "QUIT")
-	{
-		// command.args[0] == [<Message>] 
-		delete server->_users[i - 1];
-		if (i != server->getNbUsers())
-		{
-			server->_users[i - 1] = server->_users[server->getNbUsers() - 1];
-			server->_users[i - 1]->_id = i - 1;
-			server->_users[server->getNbUsers() - 1] = 0;
-			server->_fds[i] = server->_fds[server->getNbUsers()];
-		}
-		server->kickUser(i - 1);
-	}
 	else if (command.cmd == "PRIVMSG")
 		privmsg_cmd(server, command.args, i);
 	else if (command.cmd == "KICK")

@@ -6,7 +6,7 @@
 /*   By: luxojr <luxojr@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/21 10:32:47 by sforesti          #+#    #+#             */
-/*   Updated: 2024/04/10 14:49:39 by luxojr           ###   ########.fr       */
+/*   Updated: 2024/04/10 17:47:54 by luxojr           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,9 +30,9 @@ class Server
         struct sockaddr_in  _address;
         int                 _lenAddress;
         int                 _nbUsers;
-        std::string         _pass;
     
     public:
+        std::string         _pass;
         struct pollfd       _fds[4096];
         Server(int port, std::string pass);
         ~Server();
