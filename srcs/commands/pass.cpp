@@ -28,7 +28,7 @@ void pass_cmd(Server *server, std::vector<std::string> split_msg, int i)
 		response = "Connection Successful\n";
 		send(server->_fds[i].fd, response.c_str(), response.length(), 0);
 	}
-	else
+	else if (server->_pass != "\0")
 	{
 		response = "Wrong password try again\n";
 		send(server->_fds[i].fd, response.c_str(), response.length(), 0);
