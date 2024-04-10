@@ -92,7 +92,7 @@ void	Server::log_in(std::string buffer, int i)
 	index = find_index(msg, "PASS");
 	if (index != -1)
 	{
-		if (size_t(index) != msg.size() - 1 && msg[index + 1] != this->_pass)
+		if (size_t(index) != msg.size() - 1 && (!msg[index + 1].compare(this->_pass + "\n") || !msg[index + 1].compare(this->_pass + "\r\n")))
 		{
 			this->_users[i - 1]->setStatus(1);
 			response = "Connection Successful\n";
@@ -138,12 +138,22 @@ void    Server::CheckSocket()
 				this->_users[i - 1]->buffer += buffer;
 				if (this->_users[i - 1]->buffer.find("\n") != std::string::npos)
 				{
-					std::cout << "Message du client : " << _users[i - 1]->buffer << std::endl;
-					if (this->_users[i - 1]->getStatus() == 0 && !this->_pass.empty())
-						this->log_in(this->_users[i - 1]->buffer, i);
-					else if (this->_users[i - 1]->getStatus() != 0 || this->_pass.empty())
-						commands(this, this->_users[i - 1]->buffer, i);
-					this->_users[i - 1]->buffer = "\0";
+					while (this->_users[i - 1]->buffer.find("\n") != std::string::npos)
+					{
+						size_t newline = this->_users[i - 1]->buffer.find('\n');
+						std::string cmd = this->_users[i - 1]->buffer.substr(0, newline + 1);
+						if (cmd.substr(0, 3) == "CAP")
+						{
+							this->_users[i - 1]->buffer = this->_users[i - 1]->buffer.substr(newline + 1);
+							continue ;
+						}
+						std::cout << "Message du client : " << cmd << std::endl;
+						if (this->_users[i - 1]->getStatus() == 0 && !this->_pass.empty())
+							this->log_in(cmd, i);
+						else if (this->_users[i - 1]->getStatus() != 0 || this->_pass.empty())
+							commands(this, cmd, i);
+						this->_users[i - 1]->buffer = this->_users[i - 1]->buffer.substr(newline + 1);
+					}
 				}
 				if (f == 0)
 				{
