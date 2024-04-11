@@ -75,10 +75,11 @@ void	Server::close_serv()
 	int i = 1;
 	while (i <= this->_nbUsers)
 	{
-		delete(this->_users[i]);
+		delete this->_users[i];
 		i ++;
 	}
-
+	for (size_t y = 0; y < this->_usersToDel.size(); y ++)
+		delete this->_usersToDel[y];
 	close(this->_fd);
 	std::cout << "Server is closed" << std::endl;
 }
@@ -155,7 +156,8 @@ void    Server::CheckSocket()
 				if (f == 0)
 				{
 					this->kickUser(i - 1);
-					delete this->_users[i - 1];
+					this->_usersToDel.push_back(this->_users[i - 1]);
+					this->_users.erase(this->_users.begin() + i - 1);
 					if (i != this->getNbUsers())
 					{
 						this->_users[i - 1] = this->_users[this->getNbUsers() - 1];

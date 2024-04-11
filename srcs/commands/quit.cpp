@@ -11,12 +11,14 @@
 /* ************************************************************************** */
 
 #include "../../includes/Commands.hpp"
+#include <memory>
 
 void quit_cmd(Server *server, std::vector<std::string> split_msg, int i)
 {
 	(void)split_msg;
 	server->kickUser(i - 1);
-	delete server->_users[i - 1];
+	server->_usersToDel.push_back(server->_users[i - 1]);
+	server->_users.erase(server->_users.begin() + i - 1);
 	if (i != server->getNbUsers())
 	{
 		server->_users[i - 1] = server->_users[server->getNbUsers() - 1];

@@ -37,6 +37,7 @@ class Server
         Server(int port, std::string pass);
         ~Server();
         std::vector<User *>   _users;
+        std::vector<User *>   _usersToDel;
         std::map<std::string , Channel *>   _channels;
         int getFd() const;
         void kickUser(int id);
