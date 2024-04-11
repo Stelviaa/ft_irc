@@ -6,7 +6,7 @@
 /*   By: mpelazza <mpelazza@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/05 15:03:50 by mpelazza          #+#    #+#             */
-/*   Updated: 2024/04/05 18:22:51 by mpelazza         ###   ########.fr       */
+/*   Updated: 2024/04/11 12:03:02 by mpelazza         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,7 +27,7 @@ void	err_no_such_channel(Server *server, std::string chan, int i) {
 	send(server->_fds[i].fd, err.c_str(), err.size(), 0);
 }
 
-void	err_not_operator(Server *server, std::string chan, int i) { // ERR_CHANOPRIVSNEEDED
+void	err_not_operator(Server *server, std::string chan, int i) {
 	std::string	err = chan + " :You're not channel operator\n";
 	send(server->_fds[i].fd, err.c_str(), err.size(), 0);
 }

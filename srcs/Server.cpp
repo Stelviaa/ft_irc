@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Server.cpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: luxojr <luxojr@student.42.fr>              +#+  +:+       +#+        */
+/*   By: mpelazza <mpelazza@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/21 10:11:22 by sforesti          #+#    #+#             */
-/*   Updated: 2024/04/10 17:51:57 by luxojr           ###   ########.fr       */
+/*   Updated: 2024/04/11 12:58:57 by mpelazza         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,10 +18,9 @@
 #include <unistd.h>
 #include <fcntl.h>
 
-Server::Server(int port, std::string pass)
-{
+Server::Server(int port, std::string pass) {
 	this->_nbUsers = 0;
-	int option = 1;
+	int	option = 1;
 	_lenAddress = sizeof(_address);
 	if ((this->_fd = socket(AF_INET, SOCK_STREAM, 0)) == 0) {
 		perror("Erreur lors de la création du socket");
@@ -46,35 +45,28 @@ Server::Server(int port, std::string pass)
 	this->CheckSocket();
 }
 
-void    Server::CheckConnection()
-{
+void	Server::CheckConnection() {
 	User	*usr = new User();
 
-	if ((usr->setFd(accept(this->getFd(), (struct sockaddr *)this->getAddress(), (socklen_t*)this->getLenAddress()))) < 0)
-	{
+	if ((usr->setFd(accept(this->getFd(), (struct sockaddr *)this->getAddress(), (socklen_t*)this->getLenAddress()))) < 0) {
 		std::perror("Erreur lors de l'acceptation de la connexion");
 		exit(EXIT_FAILURE);
 	}
 	std::cout << "Connexion acceptée" << std::endl;
-	std::string welcome_message = "Welcome to the server !\r\n";
+	std::string	welcome_message = "Welcome to the server !\r\n";
 	this->AddUsers();
-
 	usr->_id = this->_nbUsers;
 	this->_fds[this->_nbUsers].fd = usr->getFd();
 	this->_fds[this->_nbUsers].events = POLLIN;
 	fcntl(this->_fds[this->_nbUsers].fd, F_SETFL, O_NONBLOCK);
-
 	send(this->_fds[this->_nbUsers].fd, welcome_message.c_str(), welcome_message.length(), 0);
-
 	this->_users.push_back(usr);
 }
 
-void	Server::close_serv()
-{
+void	Server::close_serv() {
 	std::cout << "Closing server ..." << std::endl;
 	int i = 1;
-	while (i <= this->_nbUsers)
-	{
+	while (i <= this->_nbUsers) {
 		delete this->_users[i];
 		i ++;
 	}
@@ -84,30 +76,25 @@ void	Server::close_serv()
 	std::cout << "Server is closed" << std::endl;
 }
 
-void	Server::log_in(std::string buffer, int i)
-{
-	std::vector<std::string> msg = ft_split(buffer, ' ');
-	std::string	response;
-	int	index;
+void	Server::log_in(std::string buffer, int i) {
+	std::vector<std::string>	msg = ft_split(buffer, ' ');
+	std::string					response;
+	int							index;
 
 	index = find_index(msg, "PASS");
-	if (index != -1)
-	{
-		if (size_t(index) != msg.size() - 1 && (!msg[index + 1].compare(this->_pass + "\n") || !msg[index + 1].compare(this->_pass + "\r\n")))
-		{
+	if (index != -1) {
+		if (size_t(index) != msg.size() - 1 && (!msg[index + 1].compare(this->_pass + "\n") || !msg[index + 1].compare(this->_pass + "\r\n"))) {
 			this->_users[i - 1]->setStatus(1);
 			response = "Connection Successful\n";
 			send(this->_fds[i].fd, response.c_str(), response.length(), 0);
 		}
-		else
-		{
+		else {
 			response = "Wrong password try again\n";
 			send(this->_fds[i].fd, response.c_str(), response.length(), 0);
 		}
 		return ;
 	}
-	else if (this->_users[i - 1]->getStatus() == 0 && !this->_pass.empty())
-	{
+	else if (this->_users[i - 1]->getStatus() == 0 && !this->_pass.empty()) {
 		response = "You have to connect using the command : PASS <password>\n";
 		send(this->_fds[i].fd, response.c_str(), response.length(), 0);
 		return ;
@@ -115,36 +102,27 @@ void	Server::log_in(std::string buffer, int i)
 
 }
 
-void    Server::CheckSocket()
-{
-	int				i = 1;
-
+void	Server::CheckSocket() {
+	int	i = 1;
 	this->_fds[0].fd = this->_fd;
 	this->_fds[0].events = POLLIN;
-	
-	while (poll(this->_fds, this->getNbUsers() + 1, -1) != -1 && close_server == false)
-	{
-		char buffer[1024] = {0};
 
-		if (this->_fds[0].revents & POLLIN)
-		{
+	while (poll(this->_fds, this->getNbUsers() + 1, -1) != -1 && close_server == false) {
+		char	buffer[1024] = {0};
+
+		if (this->_fds[0].revents & POLLIN) {
 			this->CheckConnection();
 		}
-		while (i <= this->getNbUsers())
-		{
-			if(this->_fds[i].revents & POLLIN)
-			{
+		while (i <= this->getNbUsers()) {
+			if(this->_fds[i].revents & POLLIN) {
 				int f = recv(this->_fds[i].fd, buffer, 1024, 0);
 				std::cout << f << std::endl;
 				this->_users[i - 1]->buffer += buffer;
-				if (this->_users[i - 1]->buffer.find("\n") != std::string::npos)
-				{
-					while (this->_users[i - 1]->buffer.find("\n") != std::string::npos)
-					{
+				if (this->_users[i - 1]->buffer.find("\n") != std::string::npos) {
+					while (this->_users[i - 1]->buffer.find("\n") != std::string::npos) {
 						size_t newline = this->_users[i - 1]->buffer.find('\n');
 						std::string cmd = this->_users[i - 1]->buffer.substr(0, newline + 1);
-						if (cmd.substr(0, 3) == "CAP")
-						{
+						if (cmd.substr(0, 3) == "CAP") {
 							this->_users[i - 1]->buffer = this->_users[i - 1]->buffer.substr(newline + 1);
 							continue ;
 						}
@@ -153,13 +131,11 @@ void    Server::CheckSocket()
 						this->_users[i - 1]->buffer = this->_users[i - 1]->buffer.substr(newline + 1);
 					}
 				}
-				if (f == 0)
-				{
+				if (f == 0) {
 					this->kickUser(i - 1);
 					this->_usersToDel.push_back(this->_users[i - 1]);
 					this->_users.erase(this->_users.begin() + i - 1);
-					if (i != this->getNbUsers())
-					{
+					if (i != this->getNbUsers()) {
 						this->_users[i - 1] = this->_users[this->getNbUsers() - 1];
 						this->_users[i - 1]->_id = i - 1;
 						this->_users[this->getNbUsers() - 1] = 0;
@@ -168,7 +144,6 @@ void    Server::CheckSocket()
 					this->RemoveUser();
 				}
 			}
-
 			i ++;
 		}
 		i = 1;
@@ -176,12 +151,10 @@ void    Server::CheckSocket()
 	this->close_serv();
 }
 
-void	Server::kickUser(int id)
-{
-	size_t i = 0;
-	std::string name = this->_users[id]->getNickname();
-	while (i < this->_users[id]->_channels.size())
-	{
+void	Server::kickUser(int id) {
+	size_t		i = 0;
+	std::string	name = this->_users[id]->getNickname();
+	while (i < this->_users[id]->_channels.size()) {
 		std::string chan = this->_users[id]->_channels[i];
 		this->_channels[chan]->_users.erase(name);
 		i ++;
@@ -190,12 +163,10 @@ void	Server::kickUser(int id)
 
 /****************    GETTER    ***********************/
 
-int Server::is_Users(std::string _nick)
-{
-	size_t i = 0;
+int Server::is_Users(std::string _nick) {
+	size_t	i = 0;
 
-	while (i < this->_users.size())
-	{
+	while (i < this->_users.size()) {
 		if (this->_users[i]->getNickname() == _nick)
 			return (i + 1);
 		i ++;
@@ -203,37 +174,30 @@ int Server::is_Users(std::string _nick)
 	return (0);
 }
 
-int Server::getFd() const
-{
+int Server::getFd() const {
 	return (_fd);
 }
 
-struct sockaddr_in *Server::getAddress()
-{
+struct sockaddr_in *Server::getAddress() {
 	return (&_address);
 }
 
-int Server::getNbUsers()
-{
+int	Server::getNbUsers() {
 	return (this->_nbUsers);
 }
 
-void Server::AddUsers()
-{
+void	Server::AddUsers() {
 	this->_nbUsers ++;
 }
 
-void Server::RemoveUser()
-{
+void	Server::RemoveUser() {
 	this->_nbUsers --;
 }
 
-int *Server::getLenAddress()
-{
+int	*Server::getLenAddress() {
 	return (&_lenAddress);
 }
 
-Server::~Server()
-{
+Server::~Server() {
 	close(_fd);
 }

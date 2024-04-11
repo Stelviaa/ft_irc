@@ -6,7 +6,7 @@
 /*   By: mpelazza <mpelazza@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/29 12:43:37 by mboyer            #+#    #+#             */
-/*   Updated: 2024/04/09 14:27:39 by mpelazza         ###   ########.fr       */
+/*   Updated: 2024/04/11 12:58:20 by mpelazza         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,8 +21,7 @@ int	check_duplicata(std::vector<std::string> names) {
 	return (0);
 }
 
-void	privmsg_cmd(Server *server, std::vector<std::string> param, int i)
-{
+void	privmsg_cmd(Server *server, std::vector<std::string> param, int i) {
 	if (param.empty())
 		send(server->_fds[i].fd, ":No recipient given (PRIVMSG)\n", 30, 0);
 	else if (param.size() < 2)
@@ -53,33 +52,21 @@ void	privmsg_cmd(Server *server, std::vector<std::string> param, int i)
 	}
 }
 
-void send_all_fd(Server *server, std::vector<std::string> split_msg, int i)
-{
-	int n = 1;
-	std::string join_response = ":";
-	
-	join_response += server->_users[i - 1]->getNickname();
-	join_response += " PRIVMSG ";
-	join_response += split_msg[0];
-	join_response += ' ';
-	join_response += split_msg[1];
-	join_response += '\n';
+void	send_all_fd(Server *server, std::vector<std::string> split_msg, int i) {
+	int			n = 1;
+	std::string	join_response = ":" + server->_users[i - 1]->getNickname() + " PRIVMSG " + split_msg[0] + ' ' + split_msg[1] + '\n';
+	std::string	target = split_msg[0];
 
-	std::string target = split_msg[0];
-	if (target[0] == '#')
-	{
+	if (target[0] == '#') {
 		std::map<std::string, User *>::iterator it = server->_channels[target]->_users.begin();
-		while (it != server->_channels[target]->_users.end())
-		{
+		while (it != server->_channels[target]->_users.end()) {
 			if (it->second->_id != i)
 				send(server->_fds[it->second->_id].fd, join_response.c_str(), join_response.length(), 0);
 			it ++;
 		}
 	}
-	else
-	{
-		while (n <= server->getNbUsers())
-		{
+	else {
+		while (n <= server->getNbUsers()) {
 			if (n != i && (server->_users[n - 1]->getNickname() == target))
 				send(server->_fds[n].fd, join_response.c_str(), join_response.length(), 0);
 			n ++;

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   mode.cpp                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: luxojr <luxojr@student.42.fr>              +#+  +:+       +#+        */
+/*   By: mpelazza <mpelazza@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/01 15:30:05 by luxojr            #+#    #+#             */
-/*   Updated: 2024/04/06 19:52:47 by luxojr           ###   ########.fr       */
+/*   Updated: 2024/04/11 12:57:53 by mpelazza         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,7 @@
 
 typedef struct s_param {
 	std::string	chan;
-	std::string mods;
+	std::string	mods;
 	std::string	pass;
 	std::string	limit;
 	std::string	user;
@@ -56,52 +56,45 @@ t_param	mode_cmd_param_check(Server *server, std::vector<std::string> &split_msg
 	return (param);
 }
 
-void mode_cmd(Server *server, std::vector<std::string> split_msg, int i)
-{
+void	mode_cmd(Server *server, std::vector<std::string> split_msg, int i) {
 	t_param	p = mode_cmd_param_check(server, split_msg, i);
+
 	if (p.chan.empty())
 		return ;
 
-	if (p.mods[0] == '+')
-	{
-		if (p.mods.find("i")  != std::string::npos)
+	if (p.mods[0] == '+') {
+		if (p.mods.find("i") != std::string::npos)
 			server->_channels[p.chan]->_mode |= I_ONLY;
-		if (p.mods.find("t")  != std::string::npos)
+		if (p.mods.find("t") != std::string::npos)
 			server->_channels[p.chan]->_mode |= T_OP;
-		if (p.mods.find("k")  != std::string::npos)
-		{
+		if (p.mods.find("k") != std::string::npos) {
 			server->_channels[p.chan]->_mode |= K_PASS;
 			server->_channels[p.chan]->setPassword(p.pass);
 		}
-		if (p.mods.find("l")  != std::string::npos)
-		{
+		if (p.mods.find("l") != std::string::npos) {
 			server->_channels[p.chan]->_mode |= U_LIMITS;
 			server->_channels[p.chan]->_userLimit = std::atoi(p.limit.c_str());
 		}
-		if (p.mods.find("o")  != std::string::npos)
-		{
+		if (p.mods.find("o") != std::string::npos) {
 			if (server->_channels[p.chan]->_users.find(p.user) == server->_channels[p.chan]->_users.end())
 				err_user_not_in_chan(server, p.user, p.chan, i);
 			else
 				server->_channels[p.chan]->_op.push_back(server->_channels[p.chan]->_users[p.user]);
 		}
 	}
-	if (p.mods[0] == '-')
-	{
-		if (p.mods.find("i")  != std::string::npos && server->_channels[p.chan]->_mode & I_ONLY)
+	else if (p.mods[0] == '-') {
+		if (p.mods.find("i") != std::string::npos && server->_channels[p.chan]->_mode & I_ONLY)
 			server->_channels[p.chan]->_mode ^= I_ONLY;
-		if (p.mods.find("t")  != std::string::npos && server->_channels[p.chan]->_mode & T_OP)
+		if (p.mods.find("t") != std::string::npos && server->_channels[p.chan]->_mode & T_OP)
 			server->_channels[p.chan]->_mode ^= T_OP;
-		if (p.mods.find("k")  != std::string::npos && server->_channels[p.chan]->_mode & K_PASS)
+		if (p.mods.find("k") != std::string::npos && server->_channels[p.chan]->_mode & K_PASS)
 			server->_channels[p.chan]->_mode ^= K_PASS;
-		if (p.mods.find("l")  != std::string::npos && server->_channels[p.chan]->_mode & U_LIMITS)
+		if (p.mods.find("l") != std::string::npos && server->_channels[p.chan]->_mode & U_LIMITS)
 			server->_channels[p.chan]->_mode ^= U_LIMITS;
-		if (p.mods.find("o")  != std::string::npos)
-		{
-			int index;
+		if (p.mods.find("o") != std::string::npos) {
 			if (server->_channels[p.chan]->_users.find(p.user) == server->_channels[p.chan]->_users.end())
 				err_user_not_in_chan(server, p.user, p.chan, i);
-			index = server->_channels[p.chan]->is_op(server->_channels[p.chan]->_users[p.user]);
+			int	index = server->_channels[p.chan]->is_op(server->_channels[p.chan]->_users[p.user]);
 			if (index != -1)
 				server->_channels[p.chan]->_op.erase(server->_channels[p.chan]->_op.erase(server->_channels[p.chan]->_op.begin() + index));
 		}

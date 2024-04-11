@@ -1,3 +1,14 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   main.cpp                                           :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: mpelazza <mpelazza@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2024/04/11 12:56:48 by mboyer            #+#    #+#             */
+/*   Updated: 2024/04/11 12:57:36 by mpelazza         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
 
 #include <iostream>
 #include <string>
@@ -13,23 +24,20 @@
 #include <termios.h>
 #include <cstdio>
 
-bool close_server = false;
+bool	close_server = false;
 
-void ft_exit(int signal)
-{
+void	ft_exit(int signal) {
 	(void)signal;
 	close_server = true;
 }
 
-int main(int argc, char **argv) {
-
+int	main(int argc, char **argv) {
 	signal(SIGQUIT, ft_exit);
 	signal(SIGINT, ft_exit);
 	if (argc >= 3)
-    	Server server(std::atoi(argv[1]), argv[2]);
+		Server server(std::atoi(argv[1]), argv[2]);
 	if (argc == 2)
 		Server srver(std::atoi(argv[1]), "");
-    (void) argc;
-    
-    return 0;
+	(void) argc;
+	return 0;
 }

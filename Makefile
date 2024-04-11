@@ -15,13 +15,12 @@ SRCS = main.cpp \
 		srcs/commands/pass.cpp \
 		srcs/Commands.cpp
 
- 
+
 CC = c++
 
 CFLAGS = -Wall -Wextra -Werror -std=c++98
 
-NAME = irc
-
+NAME = ircserv
 
 RM = rm -f
 

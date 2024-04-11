@@ -3,81 +3,65 @@
 /*                                                        :::      ::::::::   */
 /*   join.cpp                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: luxojr <luxojr@student.42.fr>              +#+  +:+       +#+        */
+/*   By: mpelazza <mpelazza@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/29 12:43:14 by mboyer            #+#    #+#             */
-/*   Updated: 2024/04/10 14:35:05 by luxojr           ###   ########.fr       */
+/*   Updated: 2024/04/11 13:29:21 by mpelazza         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/Commands.hpp"
 #include "../../includes/irc.hpp"
 
-void	join_rpl(Server *server, int i, std::string name)
-{
-	if (!server->_channels[name]->_topic.empty())
-	{
-		std::string topic =  name + " :" + server->_channels[name]->_topic; 
+void	join_rpl(Server *server, int i, std::string name) {
+	if (!server->_channels[name]->_topic.empty()) {
+		std::string	topic =  name + " " + server->_channels[name]->_topic; 
 		send(server->_fds[i].fd, topic.c_str(), topic.size(), 0);
 	}
-	else
-	{
+	else {
 		std::string	err = name + " :No topic is set\n";
 		send(server->_fds[i].fd, err.c_str(), err.size(), 0);
 	}
-	std::string names = name + " :";
-	std::map<std::string, User *>::iterator it = server->_channels[name]->_users.begin();
-	while (it != server->_channels[name]->_users.end())
-	{
+	std::string	names = name + " :";
+	std::map<std::string, User *>::iterator	it = server->_channels[name]->_users.begin();
+	while (it != server->_channels[name]->_users.end()) {
 		names += it->first + " ";
-		it ++;
+		it++;
 	}
+	names += "\n";
 	send(server->_fds[i].fd, names.c_str(), names.size(), 0);
 }
 
-void	process_join_cmd(Server *server, std::vector<std::string> splitted, int i)
-{
-	if (splitted[0][0] == '#')
-	{
-		std::string	name = splitted[0];
-		std::string	join_response = ":";
-		join_response += server->_users[i - 1]->getNickname();
-		join_response += " JOIN ";
-		join_response += name;
-		join_response += "\r\n";
-		if (server->_channels.find(name) == server->_channels.end())
-			server->_channels[name] = new Channel(name, server->_users[i - 1]);
-		else
-		{
-			if (server->_channels[name]->_mode & K_PASS)
-			{
-				if (splitted.size() <= 1)
-				{
-					err_cannot_join_chan(server, splitted[0], i, 'i'); //need pass
-					return ;
-				}
-				if (splitted[1] != server->_channels[name]->getPassword())
-				{
-					err_cannot_join_chan(server, splitted[0], i, 'k'); //wrong pass
-					return ;
-				}
-			}
-			if ((server->_channels[name]->_mode & U_LIMITS) && (server->_channels[name]->_userLimit >= server->_channels[name]->_users.size()))
-			{
-				err_cannot_join_chan(server, splitted[0], i, 'l'); //channel full
+void	process_join_cmd(Server *server, std::vector<std::string> splitted, int i) {
+	if (!(splitted[0][0] == '#'))
+		return ; // erreur ici ?
+
+	std::string	name = splitted[0];
+	std::string	join_response = ":" + server->_users[i - 1]->getNickname() + " JOIN " + name + "\r\n";
+	if (server->_channels.find(name) == server->_channels.end())
+		server->_channels[name] = new Channel(name, server->_users[i - 1]);
+	else {
+		if (server->_channels[name]->_mode & K_PASS) {
+			if (splitted.size() <= 1) {
+				err_cannot_join_chan(server, splitted[0], i, 'i');
 				return ;
 			}
-			server->_channels[name]->AddUsers(server->_users[i - 1]);
-			server->_users[i - 1]->_channels.push_back(name);
+			if (splitted[1] != server->_channels[name]->getPassword()) {
+				err_cannot_join_chan(server, splitted[0], i, 'k');
+				return ;
+			}
 		}
-		join_rpl(server, i, name);
+		if ((server->_channels[name]->_mode & U_LIMITS) && (server->_channels[name]->_userLimit >= server->_channels[name]->_users.size())) {
+			err_cannot_join_chan(server, splitted[0], i, 'l');
+			return ;
+		}
+		server->_channels[name]->AddUsers(server->_users[i - 1]);
+		server->_users[i - 1]->_channels.push_back(name);
 	}
+	join_rpl(server, i, name);
 }
 
-void	join_cmd(Server *server, std::vector<std::string> splitted, int i)
-{
-	std::string	name;
-
+void	join_cmd(Server *server, std::vector<std::string> splitted, int i) {
 	if (splitted.empty()) {
 		err_need_more_params(server, "JOIN", i);
 		return ;
@@ -86,7 +70,7 @@ void	join_cmd(Server *server, std::vector<std::string> splitted, int i)
 		std::istringstream	iss1(splitted[0]);
 		std::string			word;
 		while (std::getline(iss1, word, ',')) {
-			std::vector<std::string> tmp;
+			std::vector<std::string>	tmp;
 			tmp.push_back(word);
 			if (splitted.size() > 1 && !splitted[1].empty()) {
 				std::istringstream	iss2(splitted[1]);

@@ -3,35 +3,31 @@
 /*                                                        :::      ::::::::   */
 /*   Commands.cpp                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: luxojr <luxojr@student.42.fr>              +#+  +:+       +#+        */
+/*   By: mpelazza <mpelazza@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/31 12:54:49 by luxojr            #+#    #+#             */
-/*   Updated: 2024/04/10 17:56:35 by luxojr           ###   ########.fr       */
+/*   Updated: 2024/04/11 12:38:59 by mpelazza         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/Commands.hpp"
 
-int	is_valid_command(std::string cmd)
-{
+int	is_valid_command(std::string cmd) {
 	if (cmd == "NICK" || cmd == "JOIN" || cmd == "QUIT" || cmd == "PRIVMSG" ||
 		cmd == "KICK" || cmd == "TOPIC" || cmd == "MODE" || cmd == "INVITE" || 
-    	cmd == "USER" || cmd == "PASS")
+		cmd == "USER" || cmd == "PASS")
 		return (1);
 	return (0);
 }
 
-std::vector<std::string>	commands_split(std::string raw_cmd)
-{
+std::vector<std::string>	commands_split(std::string raw_cmd) {
 	std::vector<std::string>	split_cmd;
 	std::istringstream			iss(raw_cmd);
 	std::string					tmp;
 
-	while (iss >> tmp)
-	{
+	while (iss >> tmp) {
 		split_cmd.push_back(tmp);
-		if (tmp[0] == ':')
-		{
+		if (tmp[0] == ':') {
 			std::string	line;
 			std::getline(iss, line);
 			split_cmd.back() += line;
@@ -43,41 +39,24 @@ std::vector<std::string>	commands_split(std::string raw_cmd)
 	return (split_cmd);
 }
 
-s_command	commands_parsing(std::string raw_cmd)
-{
+s_command	commands_parsing(std::string raw_cmd) {
 	t_command					command;
 	std::vector<std::string>	split_cmd = commands_split(raw_cmd);
 
-	// std::cout << "vector :" << std::endl;
-	// for (std::vector<std::string>::iterator it = split_cmd.begin(); it != split_cmd.end(); ++it)
-	// std::cout << *it << std::endl;
-
-	if (!split_cmd.empty() && is_valid_command(split_cmd[0]) == 1)
-	{
-		//command.prefix = "";
+	if (!split_cmd.empty() && is_valid_command(split_cmd[0]) == 1) {
 		command.cmd = split_cmd[0];
 		command.args.assign(split_cmd.begin() + 1, split_cmd.end());
 	}
-	else if (split_cmd.size() > 1 && is_valid_command(split_cmd[1]) == 1)
-	{
+	else if (split_cmd.size() > 1 && is_valid_command(split_cmd[1]) == 1) {
 		command.prefix = split_cmd[0];
 		command.cmd = split_cmd[1];
 		command.args.assign(split_cmd.begin() + 2, split_cmd.end());
 	}
-	//else
-	//	command.cmd = "";
 	return (command);
 }
 
-void	commands(Server *server, std::string buffer, int i)
-{
+void	commands(Server *server, std::string buffer, int i) {
 	t_command	command = commands_parsing(std::string(buffer));
-
-	// std::cout << "structure :" << std::endl;
-	// std::cout << "prefix:\t" << command.prefix << std::endl;
-	// std::cout << "cmd:\t" << command.cmd << std::endl;
-	// for (std::vector<std::string>::iterator it = command.args.begin(); it != command.args.end(); ++it)
-	// std::cout << *it << std::endl;
 
 	if (command.cmd.empty())
 		send(server->_fds[i].fd, "Error: invalid command\n", 23, 0);
@@ -85,15 +64,13 @@ void	commands(Server *server, std::string buffer, int i)
 		quit_cmd(server, command.args, i);
 	else if (command.cmd == "PASS")
 		pass_cmd(server, command.args, i);
-	else if (server->_users[i - 1]->getStatus() == 0 && !server->_pass.empty())
-	{
+	else if (server->_users[i - 1]->getStatus() == 0 && !server->_pass.empty()) {
 		send(server->_fds[i].fd, "You have to connect using the command : PASS <password>\n", 57, 0);
 		return ;
 	}
 	else if (command.cmd == "NICK")
 		nick_cmd(server, command.args, i);
-	else if (server->_users[i - 1]->getNickname().empty())
-	{
+	else if (server->_users[i - 1]->getNickname().empty()) {
 		send(server->_fds[i].fd, "You have to identify using the command : NICK <nickname>\n", 58, 0);
 		return ;
 	}
