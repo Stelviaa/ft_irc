@@ -1,7 +1,7 @@
 # ft_irc
 ft_irc, project of common core to 42 school.
 ## Purpose
-This project, aims to program a irc server from scratch in c++98. The server must be functionnal with a reference client and the nc tool, chosen by students. Hexchat, in our case.
+This project, aims to program a irc server from scratch in c++98. The server must be functionnal with a reference client, chosen by students, and the nc tool. Hexchat, in our case.
 ## Download and Installation
 ```
 git clone https://github.com/Stelviaa/ft_irc.git
