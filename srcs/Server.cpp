@@ -6,7 +6,7 @@
 /*   By: sforesti <sforesti@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/21 10:11:22 by sforesti          #+#    #+#             */
-/*   Updated: 2024/04/18 15:31:23 by sforesti         ###   ########.fr       */
+/*   Updated: 2024/04/18 17:29:55 by sforesti         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -72,6 +72,9 @@ void	Server::close_serv() {
 	}
 	for (size_t y = 0; y < this->_usersToDel.size(); y ++)
 		delete this->_usersToDel[y];
+	std::map<std::string, Channel *>::iterator it;
+	for (it = this->_channels.begin(); it != this->_channels.end(); it ++)
+		delete it->second;
 	close(this->_fd);
 	std::cout << "Server is closed" << std::endl;
 }
