@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   privmsg.cpp                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mpelazza <mpelazza@student.42.fr>          +#+  +:+       +#+        */
+/*   By: mpelazza <mpelazza@student.42nice.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/29 12:43:37 by mboyer            #+#    #+#             */
-/*   Updated: 2024/04/11 12:58:20 by mpelazza         ###   ########.fr       */
+/*   Updated: 2024/04/19 09:50:49 by mpelazza         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,6 +58,10 @@ void	send_all_fd(Server *server, std::vector<std::string> split_msg, int i) {
 	std::string	target = split_msg[0];
 
 	if (target[0] == '#') {
+		if (server->_channels.find(target) == server->_channels.end()) {
+			err_no_such_channel(server, split_msg[0], i);
+			return ;
+		}
 		std::map<std::string, User *>::iterator it = server->_channels[target]->_users.begin();
 		while (it != server->_channels[target]->_users.end()) {
 			if (it->second->_id != i)
