@@ -1,3 +1,5 @@
+NAME = ircserv
+
 SRCS = main.cpp \
 		srcs/Server.cpp	\
 		srcs/User.cpp \
@@ -15,33 +17,47 @@ SRCS = main.cpp \
 		srcs/commands/pass.cpp \
 		srcs/Commands.cpp
 
-
 CC = c++
 
 CFLAGS = -Wall -Wextra -Werror -std=c++98
-
-NAME = ircserv
 
 RM = rm -f
 
 OBJS = $(SRCS:.cpp=.o)
 
+GREEN = \033[32m
+YELLOW = \033[33m
+WHITE = \033[37m
+RED = \033[0;31m
+
 %.o	:	%.cpp
-		$(CC) $(CFLAGS) -c $< -o $@
+		@echo "${WHITE}Compiling object $<"
+		@$(CC) $(CFLAGS) -c $< -o $@
+		@tput cuu1 && tput dl1
 
 all:	$(NAME)
 
 $(NAME):	$(OBJS)
-			$(CC) $(CFLAGS) -o $(NAME) $(OBJS) 
+			@echo "${WHITE}Compiling ft_irc..."
+			@$(CC) $(CFLAGS) -o $(NAME) $(OBJS)
+			@tput cuu1 && tput dl1
+			@echo "${GREEN}ft_irc OK${WHITE}"
+			
 
 debug: CFLAGS+=-g
 debug: re
 
 clean:
-		$(RM) $(OBJS) $(OBJS_BONUS)
+		@echo "${WHITE}Cleaning objects..."
+		@$(RM) $(OBJS)
+		@tput cuu1 && tput dl1
+		@echo "${YELLOW}Objects cleaned"
 
 fclean: clean
-		$(RM) $(NAME) $(NAME_BONUS)
+		@echo "${WHITE}Cleaning ft_irc"
+		@$(RM) $(NAME)
+		@tput cuu1 && tput dl1
+		@echo "${YELLOW}ft_irc cleaned${WHITE}"
 
 re: fclean all
 
