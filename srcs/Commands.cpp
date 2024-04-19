@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Commands.cpp                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mpelazza <mpelazza@student.42nice.fr>      +#+  +:+       +#+        */
+/*   By: mboyer <mboyer@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/31 12:54:49 by luxojr            #+#    #+#             */
-/*   Updated: 2024/04/19 10:22:37 by mpelazza         ###   ########.fr       */
+/*   Updated: 2024/04/19 15:35:30 by mboyer           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,7 @@
 int	is_valid_command(std::string cmd) {
 	if (cmd == "NICK" || cmd == "JOIN" || cmd == "QUIT" || cmd == "PRIVMSG" ||
 		cmd == "KICK" || cmd == "TOPIC" || cmd == "MODE" || cmd == "INVITE" || 
-		cmd == "USER" || cmd == "PASS")
+		cmd == "USER" || cmd == "PASS" || "WHO")
 		return (1);
 	return (0);
 }
@@ -55,24 +55,26 @@ s_command	commands_parsing(std::string raw_cmd) {
 	return (command);
 }
 
-void	commands(Server *server, std::string buffer, int i) {
+int	commands(Server *server, std::string buffer, int i) {
 	t_command	command = commands_parsing(std::string(buffer));
 
 	if (command.cmd.empty())
 		send(server->_fds[i].fd, "Error: invalid command\n", 23, 0);
-	else if (command.cmd == "QUIT")
+	else if (command.cmd == "QUIT") {
 		quit_cmd(server, i);
+		return 1;
+	}
 	else if (command.cmd == "PASS")
 		pass_cmd(server, command.args, i);
 	else if (server->_users[i - 1]->getStatus() == 0 && !server->_pass.empty()) {
 		send(server->_fds[i].fd, "You have to connect using the command : PASS <password>\n", 57, 0);
-		return ;
+		return 0;
 	}
 	else if (command.cmd == "NICK")
 		nick_cmd(server, command.args, i);
 	else if (server->_users[i - 1]->getNickname().empty()) {
 		send(server->_fds[i].fd, "You have to identify using the command : NICK <nickname>\n", 58, 0);
-		return ;
+		return 0;
 	}
 	else if (command.cmd == "JOIN")
 		join_cmd(server, command.args, i);
@@ -86,4 +88,5 @@ void	commands(Server *server, std::string buffer, int i) {
 		invite_cmd(server, command.args, i);
 	else if (command.cmd == "MODE")
 		mode_cmd(server, command.args, i);
+	return 0;
 }
