@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   utils.cpp                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mpelazza <mpelazza@student.42.fr>          +#+  +:+       +#+        */
+/*   By: mboyer <mboyer@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/11 12:55:00 by mboyer            #+#    #+#             */
-/*   Updated: 2024/04/11 12:56:32 by mpelazza         ###   ########.fr       */
+/*   Updated: 2024/04/19 12:41:17 by mboyer           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,13 +64,4 @@ std::string get_name(std::string name) {
 	else
 		ret = name;
 	return (ret);
-}
-
-void	show_vec(std::vector<std::string> vec) {
-	size_t	i = 0;
-
-	while (i < vec.size()) {
-		std::cout << vec[i] << std::endl;
-		i ++;
-	}
 }

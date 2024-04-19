@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Server.cpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: sforesti <sforesti@student.42.fr>          +#+  +:+       +#+        */
+/*   By: mboyer <mboyer@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/21 10:11:22 by sforesti          #+#    #+#             */
-/*   Updated: 2024/04/19 12:17:08 by sforesti         ###   ########.fr       */
+/*   Updated: 2024/04/19 15:32:43 by mboyer           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -104,20 +104,20 @@ void	Server::log_in(std::string buffer, int i) {
 
 void	Server::CheckSocket() {
 	int	i = 1;
+	int ret = 0;
 	this->_fds[0].fd = this->_fd;
 	this->_fds[0].events = POLLIN;
 
 	while (close_server == false && poll(this->_fds, this->getNbUsers() + 1, -1) != -1) {
 		char	buffer[1024] = {0};
-
 		if (this->_fds[0].revents & POLLIN)
 			this->CheckConnection();
 		while (i <= this->getNbUsers()) {
 			if(this->_fds[i].revents & POLLIN) {
 				int f = recv(this->_fds[i].fd, buffer, 1024, 0);
-				std::cout << f << std::endl;
+				std::cout << f << " " << i <<std::endl;
 				this->_users[i - 1]->buffer += buffer;
-				while (this->_users[i - 1]->buffer.find("\n") != std::string::npos) {
+				while (ret == 0 && this->_users[i - 1]->buffer.find('\n') != std::string::npos) {
 					size_t newline = this->_users[i - 1]->buffer.find('\n');
 					std::string cmd = this->_users[i - 1]->buffer.substr(0, newline + 1);
 					if (cmd.substr(0, 3) == "CAP") {
@@ -125,10 +125,11 @@ void	Server::CheckSocket() {
 						continue ;
 					}
 					std::cout << "Message du client : " << cmd << std::endl;
-					commands(this, cmd, i);
-					if (this->_users[i - 1]->buffer.size() > 0)
+					ret = commands(this, cmd, i);
+					if (ret == 0 && this->_users[i - 1]->buffer.size() > 0)
 						this->_users[i - 1]->buffer = this->_users[i - 1]->buffer.substr(newline + 1);
 				}
+				ret = 0;
 				if (f == 0)
 					quit_cmd(this, i);
 			}
