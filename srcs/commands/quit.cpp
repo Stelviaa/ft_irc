@@ -3,18 +3,17 @@
 /*                                                        :::      ::::::::   */
 /*   quit.cpp                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mpelazza <mpelazza@student.42.fr>          +#+  +:+       +#+        */
+/*   By: mpelazza <mpelazza@student.42nice.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/10 17:35:15 by luxojr            #+#    #+#             */
-/*   Updated: 2024/04/11 12:58:15 by mpelazza         ###   ########.fr       */
+/*   Updated: 2024/04/19 10:22:56 by mpelazza         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/Commands.hpp"
 #include <memory>
 
-void	quit_cmd(Server *server, std::vector<std::string> split_msg, int i) {
-	(void)split_msg;
+void	quit_cmd(Server *server, int i) {
 	server->kickUser(i - 1);
 	server->_usersToDel.push_back(server->_users[i - 1]);
 	server->_users.erase(server->_users.begin() + i - 1);

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Commands.cpp                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mpelazza <mpelazza@student.42.fr>          +#+  +:+       +#+        */
+/*   By: mpelazza <mpelazza@student.42nice.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/31 12:54:49 by luxojr            #+#    #+#             */
-/*   Updated: 2024/04/11 12:38:59 by mpelazza         ###   ########.fr       */
+/*   Updated: 2024/04/19 10:22:37 by mpelazza         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,7 +61,7 @@ void	commands(Server *server, std::string buffer, int i) {
 	if (command.cmd.empty())
 		send(server->_fds[i].fd, "Error: invalid command\n", 23, 0);
 	else if (command.cmd == "QUIT")
-		quit_cmd(server, command.args, i);
+		quit_cmd(server, i);
 	else if (command.cmd == "PASS")
 		pass_cmd(server, command.args, i);
 	else if (server->_users[i - 1]->getStatus() == 0 && !server->_pass.empty()) {

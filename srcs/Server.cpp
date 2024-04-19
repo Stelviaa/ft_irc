@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Server.cpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: sforesti <sforesti@student.42.fr>          +#+  +:+       +#+        */
+/*   By: mpelazza <mpelazza@student.42nice.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/21 10:11:22 by sforesti          #+#    #+#             */
-/*   Updated: 2024/04/18 17:29:55 by sforesti         ###   ########.fr       */
+/*   Updated: 2024/04/19 10:27:40 by mpelazza         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -102,7 +102,6 @@ void	Server::log_in(std::string buffer, int i) {
 		send(this->_fds[i].fd, response.c_str(), response.length(), 0);
 		return ;
 	}
-
 }
 
 void	Server::CheckSocket() {
@@ -113,40 +112,27 @@ void	Server::CheckSocket() {
 	while (poll(this->_fds, this->getNbUsers() + 1, -1) != -1 && close_server == false) {
 		char	buffer[1024] = {0};
 
-		if (this->_fds[0].revents & POLLIN) {
+		if (this->_fds[0].revents & POLLIN)
 			this->CheckConnection();
-		}
 		while (i <= this->getNbUsers()) {
 			if(this->_fds[i].revents & POLLIN) {
 				int f = recv(this->_fds[i].fd, buffer, 1024, 0);
 				std::cout << f << std::endl;
 				this->_users[i - 1]->buffer += buffer;
-				if (this->_users[i - 1]->buffer.find("\n") != std::string::npos) {
-					while (this->_users[i - 1]->buffer.find("\n") != std::string::npos) {
-						size_t newline = this->_users[i - 1]->buffer.find('\n');
-						std::string cmd = this->_users[i - 1]->buffer.substr(0, newline + 1);
-						if (cmd.substr(0, 3) == "CAP") {
-							this->_users[i - 1]->buffer = this->_users[i - 1]->buffer.substr(newline + 1);
-							continue ;
-						}
-						std::cout << "Message du client : " << cmd << std::endl;
-						commands(this, cmd, i);
-						if (this->_users[i - 1]->buffer.size() > 0)
-							this->_users[i - 1]->buffer = this->_users[i - 1]->buffer.substr(newline + 1);
+				while (this->_users[i - 1]->buffer.find("\n") != std::string::npos) {
+					size_t newline = this->_users[i - 1]->buffer.find('\n');
+					std::string cmd = this->_users[i - 1]->buffer.substr(0, newline + 1);
+					if (cmd.substr(0, 3) == "CAP") {
+						this->_users[i - 1]->buffer = this->_users[i - 1]->buffer.substr(newline + 1);
+						continue ;
 					}
+					std::cout << "Message du client : " << cmd << std::endl;
+					commands(this, cmd, i);
+					if (this->_users[i - 1]->buffer.size() > 0)
+						this->_users[i - 1]->buffer = this->_users[i - 1]->buffer.substr(newline + 1);
 				}
-				if (f == 0) {
-					this->kickUser(i - 1);
-					this->_usersToDel.push_back(this->_users[i - 1]);
-					this->_users.erase(this->_users.begin() + i - 1);
-					if (i != this->getNbUsers()) {
-						this->_users[i - 1] = this->_users[this->getNbUsers() - 1];
-						this->_users[i - 1]->_id = i - 1;
-						this->_users[this->getNbUsers() - 1] = 0;
-						this->_fds[i] = this->_fds[this->getNbUsers()];
-					}
-					this->RemoveUser();
-				}
+				if (f == 0)
+					quit_cmd(this, i);
 			}
 			i ++;
 		}
