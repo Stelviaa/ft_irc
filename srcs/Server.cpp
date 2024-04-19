@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Server.cpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mpelazza <mpelazza@student.42nice.fr>      +#+  +:+       +#+        */
+/*   By: sforesti <sforesti@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/21 10:11:22 by sforesti          #+#    #+#             */
-/*   Updated: 2024/04/19 10:27:40 by mpelazza         ###   ########.fr       */
+/*   Updated: 2024/04/19 12:17:08 by sforesti         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,13 +65,11 @@ void	Server::CheckConnection() {
 
 void	Server::close_serv() {
 	std::cout << "Closing server ..." << std::endl;
-	int i = 1;
-	while (i <= this->_nbUsers) {
+	int i = 0;
+	while (i < this->_nbUsers) {
 		delete this->_users[i];
 		i ++;
 	}
-	for (size_t y = 0; y < this->_usersToDel.size(); y ++)
-		delete this->_usersToDel[y];
 	std::map<std::string, Channel *>::iterator it;
 	for (it = this->_channels.begin(); it != this->_channels.end(); it ++)
 		delete it->second;
@@ -109,7 +107,7 @@ void	Server::CheckSocket() {
 	this->_fds[0].fd = this->_fd;
 	this->_fds[0].events = POLLIN;
 
-	while (poll(this->_fds, this->getNbUsers() + 1, -1) != -1 && close_server == false) {
+	while (close_server == false && poll(this->_fds, this->getNbUsers() + 1, -1) != -1) {
 		char	buffer[1024] = {0};
 
 		if (this->_fds[0].revents & POLLIN)

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Server.hpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mpelazza <mpelazza@student.42.fr>          +#+  +:+       +#+        */
+/*   By: sforesti <sforesti@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/11 11:57:28 by sforesti          #+#    #+#             */
-/*   Updated: 2024/04/11 11:58:25 by mpelazza         ###   ########.fr       */
+/*   Updated: 2024/04/19 12:03:10 by sforesti         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,7 +37,6 @@ class Server {
 		std::string							_pass;
 		struct pollfd						_fds[4096];
 		std::vector<User *>					_users;
-		std::vector<User *>					_usersToDel;
 		std::map<std::string , Channel *>	_channels;
 		
 
