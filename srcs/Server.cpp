@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Server.cpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mboyer <mboyer@student.42.fr>              +#+  +:+       +#+        */
+/*   By: luxojr <luxojr@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/21 10:11:22 by sforesti          #+#    #+#             */
-/*   Updated: 2024/04/19 15:32:43 by mboyer           ###   ########.fr       */
+/*   Updated: 2024/04/20 11:10:47 by luxojr           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,7 @@
 Server::Server(int port, std::string pass) {
 	this->_nbUsers = 0;
 	int	option = 1;
-	_lenAddress = sizeof(_address);
+	this->_lenAddress = sizeof(_address);
 	if ((this->_fd = socket(AF_INET, SOCK_STREAM, 0)) == 0) {
 		perror("Erreur lors de la création du socket");
 		exit(EXIT_FAILURE);
