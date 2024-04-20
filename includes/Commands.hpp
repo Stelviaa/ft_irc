@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Commands.hpp                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mboyer <mboyer@student.42.fr>              +#+  +:+       +#+        */
+/*   By: mpelazza <mpelazza@student.42nice.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/30 20:25:21 by luxojr            #+#    #+#             */
-/*   Updated: 2024/04/19 15:00:07 by mboyer           ###   ########.fr       */
+/*   Updated: 2024/04/20 15:47:50 by mpelazza         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,7 +35,7 @@ void	send_all_fd(Server *server, std::vector<std::string> split_msg, int i);
 void	topic_cmd(Server *server, std::vector<std::string> split_msg, int i);
 void	invite_cmd(Server *server, std::vector<std::string> split_msg, int i);
 void	pass_cmd(Server *server, std::vector<std::string> split_msg, int i);
-void	quit_cmd(Server *server, int i);
+void	quit_cmd(Server *server, std::vector<std::string> param, int i);
 void	mode_cmd(Server *server, std::vector<std::string> split_msg, int i);
 
 void	err_need_more_params(Server *server, std::string cmd, int i);

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Commands.cpp                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mboyer <mboyer@student.42.fr>              +#+  +:+       +#+        */
+/*   By: mpelazza <mpelazza@student.42nice.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/31 12:54:49 by luxojr            #+#    #+#             */
-/*   Updated: 2024/04/19 15:35:30 by mboyer           ###   ########.fr       */
+/*   Updated: 2024/04/20 16:38:48 by mpelazza         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,7 @@
 int	is_valid_command(std::string cmd) {
 	if (cmd == "NICK" || cmd == "JOIN" || cmd == "QUIT" || cmd == "PRIVMSG" ||
 		cmd == "KICK" || cmd == "TOPIC" || cmd == "MODE" || cmd == "INVITE" || 
-		cmd == "USER" || cmd == "PASS" || "WHO")
+		cmd == "USER" || cmd == "PASS" || cmd == "WHO")
 		return (1);
 	return (0);
 }
@@ -43,6 +43,7 @@ s_command	commands_parsing(std::string raw_cmd) {
 	t_command					command;
 	std::vector<std::string>	split_cmd = commands_split(raw_cmd);
 
+	command.cmd = "";
 	if (!split_cmd.empty() && is_valid_command(split_cmd[0]) == 1) {
 		command.cmd = split_cmd[0];
 		command.args.assign(split_cmd.begin() + 1, split_cmd.end());
@@ -61,7 +62,7 @@ int	commands(Server *server, std::string buffer, int i) {
 	if (command.cmd.empty())
 		send(server->_fds[i].fd, "Error: invalid command\n", 23, 0);
 	else if (command.cmd == "QUIT") {
-		quit_cmd(server, i);
+		quit_cmd(server, command.args, i);
 		return 1;
 	}
 	else if (command.cmd == "PASS")

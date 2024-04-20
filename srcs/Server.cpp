@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Server.cpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: luxojr <luxojr@student.42.fr>              +#+  +:+       +#+        */
+/*   By: mpelazza <mpelazza@student.42nice.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/21 10:11:22 by sforesti          #+#    #+#             */
-/*   Updated: 2024/04/20 11:10:47 by luxojr           ###   ########.fr       */
+/*   Updated: 2024/04/20 16:31:33 by mpelazza         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -130,8 +130,11 @@ void	Server::CheckSocket() {
 						this->_users[i - 1]->buffer = this->_users[i - 1]->buffer.substr(newline + 1);
 				}
 				ret = 0;
-				if (f == 0)
-					quit_cmd(this, i);
+				if (f == 0) {
+					std::vector<std::string>	tmp;
+					tmp.push_back("Interrupted connection");
+					quit_cmd(this, tmp, i);
+				}
 			}
 			i ++;
 		}
@@ -140,14 +143,25 @@ void	Server::CheckSocket() {
 	this->close_serv();
 }
 
-void	Server::kickUser(int id) {
-	size_t		i = 0;
-	std::string	name = this->_users[id]->getNickname();
+void	Server::kickUser(int id, std::string msg) {
+	size_t						i = 0;
+	std::string					name = this->_users[id]->getNickname();
+	std::vector<std::string>	param;
 	while (i < this->_users[id]->_channels.size()) {
+		if (i == 0)
+			param.push_back(this->_users[id]->_channels[i]);
+		else
+			param[0] += ("," + this->_users[id]->_channels[i]);
+		i++;
+	}
+	param.push_back(msg);
+	i = 0;
+	while (i < this->_users[id]->_channels.size()) {		
 		std::string chan = this->_users[id]->_channels[i];
 		this->_channels[chan]->_users.erase(name);
 		i ++;
 	}
+	privmsg_cmd(this, param, id);
 }
 
 /****************    GETTER    ***********************/
