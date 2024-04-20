@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   utils.cpp                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mboyer <mboyer@student.42.fr>              +#+  +:+       +#+        */
+/*   By: mpelazza <mpelazza@student.42nice.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/11 12:55:00 by mboyer            #+#    #+#             */
-/*   Updated: 2024/04/19 12:41:17 by mboyer           ###   ########.fr       */
+/*   Updated: 2024/04/20 11:18:01 by mpelazza         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,8 +18,7 @@ std::vector<std::string> ft_split(std::string string, char sep) {
 
 	index = string.find(sep);
 	ret.push_back(string.substr(0, index));
-	while (string.size() > 1 && index != std::string::npos)
-	{
+	while (string.size() > 1 && index != std::string::npos) {
 		string.erase(0, index + 1);
 		index = string.find_first_not_of(sep);
 		string.erase(0, index);
@@ -45,8 +44,7 @@ int find_index(std::vector<std::string> vec, std::string str) {
 int find_channel(std::vector<Channel *> vec, std::string str) {
 	size_t	i = 0;
 
-	while (i < vec.size())
-	{
+	while (i < vec.size()) {
 		if (vec[i]->getName().find(str) != std::string::npos)
 			return (i);
 		i ++;

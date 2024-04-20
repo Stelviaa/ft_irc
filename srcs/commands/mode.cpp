@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   mode.cpp                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: luxojr <luxojr@student.42.fr>              +#+  +:+       +#+        */
+/*   By: mpelazza <mpelazza@student.42nice.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/01 15:30:05 by luxojr            #+#    #+#             */
-/*   Updated: 2024/04/19 22:28:17 by luxojr           ###   ########.fr       */
+/*   Updated: 2024/04/20 11:32:07 by mpelazza         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,8 +20,7 @@ typedef struct s_param {
 	std::string	user;
 }				t_param;
 
-void	mode_rpl(Server *server, t_param param, int i)
-{
+void	mode_rpl(Server *server, t_param param, int i) {
 	std::string rpl = "";
 	if (server->_channels[param.chan]->_mode == 0)
 		rpl = param.chan + ": -itkl";
@@ -54,8 +53,7 @@ t_param	mode_cmd_param_check(Server *server, std::vector<std::string> &split_msg
 		return (param);
 	}
 	std::cout << "pp" << std::endl;
-	if (split_msg.size() == 1)
-	{
+	if (split_msg.size() == 1) {
 		std::cout << "oo" << std::endl;
 		mode_rpl(server, param, i);
 		param.chan = "";
