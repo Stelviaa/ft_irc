@@ -6,7 +6,7 @@
 /*   By: mboyer <mboyer@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/31 12:54:49 by luxojr            #+#    #+#             */
-/*   Updated: 2024/04/19 15:35:30 by mboyer           ###   ########.fr       */
+/*   Updated: 2024/04/20 16:43:51 by mboyer           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,7 @@
 int	is_valid_command(std::string cmd) {
 	if (cmd == "NICK" || cmd == "JOIN" || cmd == "QUIT" || cmd == "PRIVMSG" ||
 		cmd == "KICK" || cmd == "TOPIC" || cmd == "MODE" || cmd == "INVITE" || 
-		cmd == "USER" || cmd == "PASS" || "WHO")
+		cmd == "USER" || cmd == "PASS" || cmd == "WHO")
 		return (1);
 	return (0);
 }

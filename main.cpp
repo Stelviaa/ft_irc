@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.cpp                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mpelazza <mpelazza@student.42.fr>          +#+  +:+       +#+        */
+/*   By: mboyer <mboyer@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/11 12:56:48 by mboyer            #+#    #+#             */
-/*   Updated: 2024/04/11 12:57:36 by mpelazza         ###   ########.fr       */
+/*   Updated: 2024/04/20 15:16:47 by mboyer           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,8 +36,8 @@ int	main(int argc, char **argv) {
 	signal(SIGINT, ft_exit);
 	if (argc >= 3)
 		Server server(std::atoi(argv[1]), argv[2]);
-	if (argc == 2)
-		Server srver(std::atoi(argv[1]), "");
+	else if (argc == 2)
+		Server server(std::atoi(argv[1]), "");
 	(void) argc;
 	return 0;
 }

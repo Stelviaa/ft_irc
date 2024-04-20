@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   bot.hpp                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: luxojr <luxojr@student.42.fr>              +#+  +:+       +#+        */
+/*   By: mboyer <mboyer@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/19 22:58:12 by luxojr            #+#    #+#             */
-/*   Updated: 2024/04/20 11:30:34 by luxojr           ###   ########.fr       */
+/*   Updated: 2024/04/20 16:14:32 by mboyer           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,19 +14,33 @@
 # define BOT_HPP
 # include <sys/socket.h>
 # include "../includes/User.hpp"
+# include <fstream>
+# include <cstdlib>
+# include <ctime>
+# include <arpa/inet.h>
+# include <stdio.h>
+# include <string.h>
+# include <sys/socket.h>
+# include <unistd.h>
+# include <iostream>
 
 class Bot
 {
-	public:
-		Bot();
-		~Bot();
+    public:
+        Bot(int port, std::string pass);
+        ~Bot();
 
-		int set_fd(int i);
-		int fd;
+		void openfile();
+		void connection(std::string pass);
+        int set_fd(int i);
+        int _fd;
+        void parsePokemon();
+        std::string randomPokemon();  
 
-	private:
+    private:
+        std::vector<std::string> _pokemon;
 
-	
+    
 };
 
 #endif
