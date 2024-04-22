@@ -6,7 +6,7 @@
 /*   By: mpelazza <mpelazza@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/21 10:11:22 by sforesti          #+#    #+#             */
-/*   Updated: 2024/04/22 13:47:08 by mpelazza         ###   ########.fr       */
+/*   Updated: 2024/04/22 13:58:05 by mpelazza         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -151,7 +151,8 @@ void	Server::kickUser(int id, std::string msg) {
 		std::map<std::string, User *>::iterator it = this->_channels[chan]->_users.begin();
 		while (it != this->_channels[chan]->_users.end()) {
 			if (it->second->_id - 1 != id)
-				send(this->_fds[it->second->_id].fd, msg.c_str(), msg.length(), 0);
+				std::string tmp = "QUIT " + chan + " :" + msg;
+				send(this->_fds[it->second->_id].fd, tmp.c_str(), tmp.length(), 0);
 			it ++;
 		}
 		this->_channels[chan]->_users.erase(name);
