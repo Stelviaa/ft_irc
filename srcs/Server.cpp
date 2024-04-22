@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Server.cpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mpelazza <mpelazza@student.42nice.fr>      +#+  +:+       +#+        */
+/*   By: mpelazza <mpelazza@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/21 10:11:22 by sforesti          #+#    #+#             */
-/*   Updated: 2024/04/20 16:31:33 by mpelazza         ###   ########.fr       */
+/*   Updated: 2024/04/22 12:04:12 by mpelazza         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -144,24 +144,19 @@ void	Server::CheckSocket() {
 }
 
 void	Server::kickUser(int id, std::string msg) {
-	size_t						i = 0;
-	std::string					name = this->_users[id]->getNickname();
-	std::vector<std::string>	param;
+	size_t		i = 0;
+	std::string	name = this->_users[id]->getNickname();
 	while (i < this->_users[id]->_channels.size()) {
-		if (i == 0)
-			param.push_back(this->_users[id]->_channels[i]);
-		else
-			param[0] += ("," + this->_users[id]->_channels[i]);
-		i++;
-	}
-	param.push_back(msg);
-	i = 0;
-	while (i < this->_users[id]->_channels.size()) {		
 		std::string chan = this->_users[id]->_channels[i];
+		std::map<std::string, User *>::iterator it = this->_channels[chan]->_users.begin();
+		while (it != this->_channels[chan]->_users.end()) {
+			if (it->second->_id != id)
+				send(this->_fds[it->second->_id].fd, msg.c_str(), msg.length(), 0);
+			it ++;
+		}
 		this->_channels[chan]->_users.erase(name);
 		i ++;
 	}
-	privmsg_cmd(this, param, id);
 }
 
 /****************    GETTER    ***********************/
