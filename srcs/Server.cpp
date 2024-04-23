@@ -22,6 +22,11 @@ Server::Server(int port, std::string pass) {
 	this->_nbUsers = 0;
 	int	option = 1;
 	this->_lenAddress = sizeof(_address);
+	if (port <= 0 || port >= 65536)
+	{
+		perror("Port invalide");
+		exit(EXIT_FAILURE);
+	}
 	if ((this->_fd = socket(AF_INET, SOCK_STREAM, 0)) == 0) {
 		perror("Erreur lors de la création du socket");
 		exit(EXIT_FAILURE);
@@ -115,7 +120,6 @@ void	Server::CheckSocket() {
 		while (i <= this->getNbUsers()) {
 			if(this->_fds[i].revents & POLLIN) {
 				int f = recv(this->_fds[i].fd, buffer, 1024, 0);
-				std::cout << f << " " << i <<std::endl;
 				this->_users[i - 1]->buffer += buffer;
 				while (ret == 0 && this->_users[i - 1]->buffer.find('\n') != std::string::npos) {
 					size_t newline = this->_users[i - 1]->buffer.find('\n');
@@ -124,7 +128,6 @@ void	Server::CheckSocket() {
 						this->_users[i - 1]->buffer = this->_users[i - 1]->buffer.substr(newline + 1);
 						continue ;
 					}
-					std::cout << "Message du client : " << cmd << std::endl;
 					ret = commands(this, cmd, i);
 					if (ret == 0 && this->_users[i - 1]->buffer.size() > 0)
 						this->_users[i - 1]->buffer = this->_users[i - 1]->buffer.substr(newline + 1);
