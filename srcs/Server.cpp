@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Server.cpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: luxojr <luxojr@student.42.fr>              +#+  +:+       +#+        */
+/*   By: mpelazza <mpelazza@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/21 10:11:22 by sforesti          #+#    #+#             */
-/*   Updated: 2024/04/20 11:10:47 by luxojr           ###   ########.fr       */
+/*   Updated: 2024/04/22 16:48:46 by mpelazza         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -130,8 +130,11 @@ void	Server::CheckSocket() {
 						this->_users[i - 1]->buffer = this->_users[i - 1]->buffer.substr(newline + 1);
 				}
 				ret = 0;
-				if (f == 0)
-					quit_cmd(this, i);
+				if (f == 0) {
+					std::vector<std::string>	tmp;
+					tmp.push_back("Interrupted connection");
+					quit_cmd(this, tmp, i);
+				}
 			}
 			i ++;
 		}
@@ -140,11 +143,19 @@ void	Server::CheckSocket() {
 	this->close_serv();
 }
 
-void	Server::kickUser(int id) {
+void	Server::kickUser(int id, std::string msg) {
 	size_t		i = 0;
 	std::string	name = this->_users[id]->getNickname();
 	while (i < this->_users[id]->_channels.size()) {
 		std::string chan = this->_users[id]->_channels[i];
+		std::map<std::string, User *>::iterator it = this->_channels[chan]->_users.begin();
+		while (it != this->_channels[chan]->_users.end()) {
+			if (it->second->_id - 1 != id) {
+				std::string tmp = "QUIT " + chan + " :" + msg;
+				send(this->_fds[it->second->_id].fd, tmp.c_str(), tmp.length(), 0);
+			}
+			it ++;
+		}
 		this->_channels[chan]->_users.erase(name);
 		i ++;
 	}
