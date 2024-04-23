@@ -128,6 +128,7 @@ void	Server::CheckSocket() {
 						this->_users[i - 1]->buffer = this->_users[i - 1]->buffer.substr(newline + 1);
 						continue ;
 					}
+					std::cout << cmd << std::endl;
 					ret = commands(this, cmd, i);
 					if (ret == 0 && this->_users[i - 1]->buffer.size() > 0)
 						this->_users[i - 1]->buffer = this->_users[i - 1]->buffer.substr(newline + 1);

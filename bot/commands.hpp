@@ -1,24 +1,17 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   main.cpp                                           :+:      :+:    :+:   */
+/*   commands.hpp                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: sforesti <sforesti@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/04/19 22:58:21 by luxojr            #+#    #+#             */
-/*   Updated: 2024/04/23 17:53:30 by sforesti         ###   ########.fr       */
+/*   Created: 2024/04/23 17:46:33 by sforesti          #+#    #+#             */
+/*   Updated: 2024/04/23 18:49:22 by sforesti         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "Bot.hpp"
-#include <cstdlib>
+#include <iostream>
 
-int main(int argc, char const* argv[])
-{
-	if (argc >= 3)
-		Bot bot(std::atoi(argv[1]), argv[2]);
-	else if (argc == 2)
-		Bot bot(std::atoi(argv[1]), "");
-	(void) argc;
-    return 0;
-}
+void inviteCommand(std::string line, Bot *bot);
+void sendPokemon(std::string line, Bot *bot);

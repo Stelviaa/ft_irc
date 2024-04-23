@@ -1,20 +1,25 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   bot.cpp                                            :+:      :+:    :+:   */
+/*   Bot.cpp                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: luxojr <luxojr@student.42.fr>              +#+  +:+       +#+        */
+/*   By: sforesti <sforesti@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/20 12:34:15 by sforesti          #+#    #+#             */
-/*   Updated: 2024/04/21 11:57:10 by luxojr           ###   ########.fr       */
+/*   Updated: 2024/04/23 19:45:14 by sforesti         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "bot.hpp"
+#include "commands.hpp"
 
 Bot::Bot(int port, std::string pass){
 
-    int status, valread;
+    if (port <= 0 || port >= 65536)
+	{
+		perror("Port invalide");
+		exit(EXIT_FAILURE);
+	}
+    int status;
     struct sockaddr_in serv_addr;
     if ((this->_fd = socket(AF_INET, SOCK_STREAM, 0)) < 0) {
         printf("\n Socket creation error \n");
@@ -33,17 +38,23 @@ Bot::Bot(int port, std::string pass){
 }
 
 void Bot::read_fd()
-{
-    char buffer[1024] = { 0 };
-    while (read(this->_fd, buffer, 1024 - 1) != -1)
+{   
+    int valread = -2;
+    while (valread != -1 && valread != 0)
     {
-        printf("%s\n", buffer);
+        char buffer[1024] = {0};
+        valread = read(this->_fd, buffer, 1024 - 1);
+        if (valread != -1 && valread != 0)
+        {
+            std::string tmp = buffer;
+            inviteCommand(tmp, this);
+            sendPokemon(tmp, this);   
+        }
     }
 }
 
 void Bot::connection(std::string pass)
 {
-    char buffer[1024] = { 0 };
     if (!pass.empty())
     {
         std::string con_msg = "PASS " + pass + "\n";
@@ -72,7 +83,7 @@ std::string Bot::randomPokemon()
 {
     std::srand(std::time(0));
 
-    int index = std::rand() % 151;
+    size_t index = std::rand() % 151;
     if (this->_pokemon.size() > index)
         return (this->_pokemon[index]);
     else

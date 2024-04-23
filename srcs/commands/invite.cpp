@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   invite.cpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mpelazza <mpelazza@student.42.fr>          +#+  +:+       +#+        */
+/*   By: sforesti <sforesti@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/01 15:08:45 by luxojr            #+#    #+#             */
-/*   Updated: 2024/04/11 12:32:52 by mpelazza         ###   ########.fr       */
+/*   Updated: 2024/04/23 18:32:21 by sforesti         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,7 +41,7 @@ void	invite_cmd(Server *server, std::vector<std::string> split_msg, int i) {
 		}
 		server->_channels[split_msg[1]]->_invitedUsers.push_back(split_msg[0]);
 	}
-	std::string	inv_msg = "" + server->_users[i - 1]->getNickname() + " invited you to " + split_msg[1] + "\n";
+	std::string	inv_msg = server->_users[i - 1]->getNickname() + " invited you to " + split_msg[1] + "\n";
 	send(server->_fds[server->is_Users(split_msg[0])].fd, inv_msg.c_str(), inv_msg.size(), 0);
 	err_message += split_msg[1] + " " + split_msg[0] + "\n";
 	send(server->_fds[i].fd, err_message.c_str(), err_message.size(), 0);

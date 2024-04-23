@@ -1,4 +1,5 @@
 NAME = ircserv
+NAME_BOT = pokebot
 
 SRCS = main.cpp \
 		srcs/Server.cpp	\
@@ -17,6 +18,10 @@ SRCS = main.cpp \
 		srcs/commands/pass.cpp \
 		srcs/Commands.cpp
 
+SRCS_BOT = bot/main.cpp \
+			bot/Bot.cpp \
+			bot/commands.cpp
+
 CC = c++
 
 CFLAGS = -Wall -Wextra -Werror -std=c++98
@@ -24,6 +29,7 @@ CFLAGS = -Wall -Wextra -Werror -std=c++98
 RM = rm -f
 
 OBJS = $(SRCS:.cpp=.o)
+OBJS_BOT = $(SRCS_BOT:.cpp=.o)
 
 GREEN = \033[32m
 YELLOW = \033[33m
@@ -43,19 +49,26 @@ $(NAME):	$(OBJS)
 			@tput cuu1 && tput dl1
 			@echo "${GREEN}ft_irc OK${WHITE}"
 			
+bot:	$(NAME_BOT)
+
+$(NAME_BOT): $(OBJS_BOT)
+			@echo "${WHITE}Compiling PokeBot..."
+			@$(CC) $(CFLAGS) -o $(NAME_BOT) $(OBJS_BOT)
+			@tput cuu1 && tput dl1
+			@echo "${GREEN}PokeBot OK${WHITE}"
 
 debug: CFLAGS+=-g
 debug: re
 
 clean:
 		@echo "${WHITE}Cleaning objects..."
-		@$(RM) $(OBJS)
+		@$(RM) $(OBJS) $(OBJS_BOT)
 		@tput cuu1 && tput dl1
 		@echo "${YELLOW}Objects cleaned"
 
 fclean: clean
 		@echo "${WHITE}Cleaning ft_irc"
-		@$(RM) $(NAME)
+		@$(RM) $(NAME) $(NAME_BOT)
 		@tput cuu1 && tput dl1
 		@echo "${YELLOW}ft_irc cleaned${WHITE}"
 
