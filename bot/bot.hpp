@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   bot.hpp                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mboyer <mboyer@student.42.fr>              +#+  +:+       +#+        */
+/*   By: luxojr <luxojr@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/19 22:58:12 by luxojr            #+#    #+#             */
-/*   Updated: 2024/04/20 16:14:32 by mboyer           ###   ########.fr       */
+/*   Updated: 2024/04/21 11:52:50 by luxojr           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,6 +36,7 @@ class Bot
         int _fd;
         void parsePokemon();
         std::string randomPokemon();  
+        void read_fd();
 
     private:
         std::vector<std::string> _pokemon;

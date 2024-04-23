@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   bot.cpp                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mboyer <mboyer@student.42.fr>              +#+  +:+       +#+        */
+/*   By: luxojr <luxojr@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/20 12:34:15 by sforesti          #+#    #+#             */
-/*   Updated: 2024/04/20 16:17:05 by mboyer           ###   ########.fr       */
+/*   Updated: 2024/04/21 11:57:10 by luxojr           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,27 +27,30 @@ Bot::Bot(int port, std::string pass){
         printf("\nConnection Failed \n");
         exit(EXIT_FAILURE);
     }
+    this->connection(pass);
+    this->read_fd();
+    
+}
 
-
-    char* con_msg = "NICK bot\nUSER bot\n";
+void Bot::read_fd()
+{
     char buffer[1024] = { 0 };
-    send(this->_fd, con_msg, strlen(con_msg), 0);
-    valread = read(this->_fd, buffer, 1024 - 1);
-    printf("%s\n", buffer);
-    std::cout << this->_fd << std::endl;
-    int i = 0;
-    /*while ((i = recv(this->_fd, buffer, 1024, 0)) != -1)
+    while (read(this->_fd, buffer, 1024 - 1) != -1)
     {
-        if ()
-    }*/
+        printf("%s\n", buffer);
+    }
 }
 
 void Bot::connection(std::string pass)
 {
-    if (pass.empty())
+    char buffer[1024] = { 0 };
+    if (!pass.empty())
     {
-        
+        std::string con_msg = "PASS " + pass + "\n";
+        send(this->_fd, con_msg.c_str(), con_msg.size(), 0);
     }
+    std::string id_msg = "NICK bot\nUSER bot\n";
+    send(this->_fd, id_msg.c_str(), id_msg.size(), 0);
 }
 
 void Bot::openfile()
