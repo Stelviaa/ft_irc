@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Server.hpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: sforesti <sforesti@student.42.fr>          +#+  +:+       +#+        */
+/*   By: mpelazza <mpelazza@student.42nice.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/11 11:57:28 by sforesti          #+#    #+#             */
-/*   Updated: 2024/04/19 12:03:10 by sforesti         ###   ########.fr       */
+/*   Updated: 2024/04/20 16:03:03 by mpelazza         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,7 +45,7 @@ class Server {
 		void				CheckSocket();
 		void				CheckConnection();
 		void				log_in(std::string buffer, int i);
-		void				kickUser(int id);
+		void				kickUser(int id, std::string msg);
 		void				close_serv();
 		int					getFd() const;
 		int					is_Users(std::string _nick);
