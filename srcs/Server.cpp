@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Server.cpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mpelazza <mpelazza@student.42.fr>          +#+  +:+       +#+        */
+/*   By: sforesti <sforesti@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/21 10:11:22 by sforesti          #+#    #+#             */
-/*   Updated: 2024/04/22 16:48:46 by mpelazza         ###   ########.fr       */
+/*   Updated: 2024/04/23 19:50:11 by sforesti         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -128,7 +128,6 @@ void	Server::CheckSocket() {
 						this->_users[i - 1]->buffer = this->_users[i - 1]->buffer.substr(newline + 1);
 						continue ;
 					}
-					std::cout << cmd << std::endl;
 					ret = commands(this, cmd, i);
 					if (ret == 0 && this->_users[i - 1]->buffer.size() > 0)
 						this->_users[i - 1]->buffer = this->_users[i - 1]->buffer.substr(newline + 1);
