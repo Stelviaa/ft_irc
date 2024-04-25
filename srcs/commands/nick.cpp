@@ -6,7 +6,7 @@
 /*   By: mpelazza <mpelazza@student.42nice.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/29 12:44:10 by mboyer            #+#    #+#             */
-/*   Updated: 2024/04/25 12:45:30 by mpelazza         ###   ########.fr       */
+/*   Updated: 2024/04/25 12:59:45 by mpelazza         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,7 +34,7 @@ void	nick_cmd(Server *server, std::vector<std::string> param, int i) {
 		send(server->_fds[i].fd, ": No nickname given\n", 20, 0);
 		return ;
 	}
-	else if (is_non_ascii(param[0]) == 1 || param[0].size() > 9) {
+	else if (is_non_ascii(param[0]) == 1 || param[0].size() > 9  || param[0].size() < 1 || param[0][0] == '#') {
 		std::string	err = param[0] + " :Erroneus nickname\n";
 		send(server->_fds[i].fd, err.c_str(), err.size(), 0);
 		return ;
