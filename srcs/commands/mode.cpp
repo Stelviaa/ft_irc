@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   mode.cpp                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mpelazza <mpelazza@student.42nice.fr>      +#+  +:+       +#+        */
+/*   By: sforesti <sforesti@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/01 15:30:05 by luxojr            #+#    #+#             */
-/*   Updated: 2024/04/20 11:32:07 by mpelazza         ###   ########.fr       */
+/*   Updated: 2024/04/25 15:10:20 by sforesti         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,9 +52,7 @@ t_param	mode_cmd_param_check(Server *server, std::vector<std::string> &split_msg
 		param.chan = "";
 		return (param);
 	}
-	std::cout << "pp" << std::endl;
 	if (split_msg.size() == 1) {
-		std::cout << "oo" << std::endl;
 		mode_rpl(server, param, i);
 		param.chan = "";
 		return (param);
@@ -72,7 +70,12 @@ t_param	mode_cmd_param_check(Server *server, std::vector<std::string> &split_msg
 	if (param.mods.find("l") != std::string::npos)
 		param.limit = split_msg[j++];
 	if (param.mods.find("o") != std::string::npos)
-		param.user = split_msg[j++];
+	{
+		if (!split_msg[j].c_str())
+			err_need_more_params(server, param.chan, i);
+		else
+			param.user = split_msg[j++];
+	}
 	if (server->_channels[param.chan]->is_op(server->_users[i - 1]) == -1) {
 		err_not_operator(server, param.chan, i);
 		param.chan = "";
