@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   nick.cpp                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mpelazza <mpelazza@student.42.fr>          +#+  +:+       +#+        */
+/*   By: mpelazza <mpelazza@student.42nice.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/29 12:44:10 by mboyer            #+#    #+#             */
-/*   Updated: 2024/04/11 12:58:03 by mpelazza         ###   ########.fr       */
+/*   Updated: 2024/04/25 12:45:30 by mpelazza         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,5 +44,11 @@ void	nick_cmd(Server *server, std::vector<std::string> param, int i) {
 		send(server->_fds[i].fd, err.c_str(), err.size(), 0);
 		return ;
 	}
+	std::string	tmp = server->_users[i - 1]->getNickname();
 	server->_users[i - 1]->setNickname(param[0]);
+	for (size_t j = 0; j < server->_users[i - 1]->_channels.size(); j++) {
+		std::string	chan = server->_users[i - 1]->_channels[j];
+		server->_channels[chan]->_users.erase(tmp);
+		server->_channels[chan]->AddUsers(server->_users[i - 1]);
+	}
 }

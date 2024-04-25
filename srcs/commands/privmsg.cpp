@@ -6,7 +6,7 @@
 /*   By: mpelazza <mpelazza@student.42nice.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/29 12:43:37 by mboyer            #+#    #+#             */
-/*   Updated: 2024/04/19 09:50:49 by mpelazza         ###   ########.fr       */
+/*   Updated: 2024/04/25 10:42:04 by mpelazza         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,7 +25,7 @@ void	privmsg_cmd(Server *server, std::vector<std::string> param, int i) {
 	if (param.empty())
 		send(server->_fds[i].fd, ":No recipient given (PRIVMSG)\n", 30, 0);
 	else if (param.size() < 2)
-		send(server->_fds[i].fd, ":No text to send\n", 16, 0);
+		send(server->_fds[i].fd, ":No text to send\n", 17, 0);
 	else if (std::string(param[1]).find(":") != std::string::npos) {
 		if (param[0].find(',') != std::string::npos) {
 			std::vector<std::string>	names;

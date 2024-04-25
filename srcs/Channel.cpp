@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Channel.cpp                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mpelazza <mpelazza@student.42.fr>          +#+  +:+       +#+        */
+/*   By: mpelazza <mpelazza@student.42nice.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/30 17:08:42 by luxojr            #+#    #+#             */
-/*   Updated: 2024/04/11 12:37:09 by mpelazza         ###   ########.fr       */
+/*   Updated: 2024/04/25 11:54:20 by mpelazza         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,8 +27,7 @@ void	Channel::AddUsers(User *usr) {
 int	Channel::is_op(User *usr) {
 	size_t i = 0;
 
-	while (i < this->_op.size())
-	{
+	while (i < this->_op.size()) {
 		if (this->_op[i] == usr)
 			return (i);
 		i ++;
