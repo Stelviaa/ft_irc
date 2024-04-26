@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   kick.cpp                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mpelazza <mpelazza@student.42.fr>          +#+  +:+       +#+        */
+/*   By: sforesti <sforesti@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/31 12:26:14 by luxojr            #+#    #+#             */
-/*   Updated: 2024/04/11 13:20:02 by mpelazza         ###   ########.fr       */
+/*   Updated: 2024/04/26 16:32:10 by sforesti         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,7 +34,13 @@ void	kick_cmd(Server *server, std::vector<std::string> splitted, int i) {
 				else
 					send(server->_fds[server->_channels[chan]->_users[name]->_id].fd, "You have been kicked\n", 22, 0);
 				server->_channels[chan]->_users.erase(name);
-				server->_users[server->is_Users(name)]->removeChannel(chan);
+				server->_users[server->is_Users(name) - 1]->removeChannel(chan);
+				if (server->_channels[chan]->_users.size() == 0)
+				{
+					Channel *tmp = server->_channels[chan];
+					server->_channels.erase(server->_channels.find(chan));
+					delete tmp;
+				}
 			}
 			else
 				err_user_not_in_chan(server, splitted[1], splitted[0], i);
