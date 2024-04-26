@@ -6,7 +6,7 @@
 /*   By: sforesti <sforesti@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/29 12:43:14 by mboyer            #+#    #+#             */
-/*   Updated: 2024/04/26 17:19:21 by sforesti         ###   ########.fr       */
+/*   Updated: 2024/04/26 17:44:14 by sforesti         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,7 +54,7 @@ void	process_join_cmd(Server *server, std::vector<std::string> splitted, int i) 
 				return ;
 			}
 		}
-		if ((server->_channels[name]->_mode & U_LIMITS) && (server->_channels[name]->_userLimit >= server->_channels[name]->_users.size())) {
+		if ((server->_channels[name]->_mode & U_LIMITS) && (server->_channels[name]->_userLimit <= server->_channels[name]->_users.size())) {
 			err_cannot_join_chan(server, splitted[0], i, 'l');
 			return ;
 		}
