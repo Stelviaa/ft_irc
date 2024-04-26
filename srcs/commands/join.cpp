@@ -6,7 +6,7 @@
 /*   By: sforesti <sforesti@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/29 12:43:14 by mboyer            #+#    #+#             */
-/*   Updated: 2024/04/19 11:56:28 by sforesti         ###   ########.fr       */
+/*   Updated: 2024/04/26 13:44:42 by sforesti         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,7 +46,7 @@ void	process_join_cmd(Server *server, std::vector<std::string> splitted, int i) 
 	else {
 		if (server->_channels[name]->_mode & K_PASS) {
 			if (splitted.size() <= 1) {
-				err_cannot_join_chan(server, splitted[0], i, 'i');
+				err_cannot_join_chan(server, splitted[0], i, 'k');
 				return ;
 			}
 			if (splitted[1] != server->_channels[name]->getPassword()) {
@@ -58,6 +58,22 @@ void	process_join_cmd(Server *server, std::vector<std::string> splitted, int i) 
 			err_cannot_join_chan(server, splitted[0], i, 'l');
 			return ;
 		}
+		std::cout << "a" << std::endl;
+		if (server->_channels[name]->_mode & I_ONLY){
+			size_t j = 0;
+			while (j < server->_channels[name]->_invitedUsers.size())
+			{
+				if (server->_channels[name]->_invitedUsers[j] == server->_users[i - 1]->getNickname())
+					break ;
+				j ++;
+			}
+			if (j == server->_channels[name]->_invitedUsers.size())
+			{
+				err_cannot_join_chan(server, splitted[0], i, 'i');
+				return ;
+			}
+		}
+		std::cout << "b" << std::endl;
 		server->_channels[name]->AddUsers(server->_users[i - 1]);
 		server->_users[i - 1]->_channels.push_back(name);
 	}
