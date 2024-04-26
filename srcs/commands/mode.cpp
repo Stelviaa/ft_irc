@@ -6,7 +6,7 @@
 /*   By: sforesti <sforesti@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/01 15:30:05 by luxojr            #+#    #+#             */
-/*   Updated: 2024/04/25 15:10:20 by sforesti         ###   ########.fr       */
+/*   Updated: 2024/04/26 11:28:22 by sforesti         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,12 +65,19 @@ t_param	mode_cmd_param_check(Server *server, std::vector<std::string> &split_msg
 				send(server->_fds[i].fd, err.c_str(), err.size(), 0);
 		}
 	}
-	if (param.mods.find("k") != std::string::npos)
-		param.pass = split_msg[j++];
-	if (param.mods.find("l") != std::string::npos)
-		param.limit = split_msg[j++];
-	if (param.mods.find("o") != std::string::npos)
-	{
+	if (param.mods.find("k") != std::string::npos){
+		if (!split_msg[j].c_str())
+			err_need_more_params(server, param.chan, i);
+		else
+			param.pass = split_msg[j++];
+	}
+	if (param.mods.find("l") != std::string::npos){
+		if (!split_msg[j].c_str())
+			err_need_more_params(server, param.chan, i);
+		else
+			param.limit = split_msg[j++];
+	}
+	if (param.mods.find("o") != std::string::npos){
 		if (!split_msg[j].c_str())
 			err_need_more_params(server, param.chan, i);
 		else
