@@ -6,7 +6,7 @@
 /*   By: sforesti <sforesti@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/29 12:43:14 by mboyer            #+#    #+#             */
-/*   Updated: 2024/04/26 17:44:14 by sforesti         ###   ########.fr       */
+/*   Updated: 2024/04/26 18:10:19 by sforesti         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,6 +44,12 @@ void	process_join_cmd(Server *server, std::vector<std::string> splitted, int i) 
 	if (server->_channels.find(name) == server->_channels.end())
 		server->_channels[name] = new Channel(name, server->_users[i - 1]);
 	else {
+		if (server->_channels[name]->_users.find(server->_users[i - 1]->getNickname()) != server->_channels[name]->_users.end())
+		{
+			std::string msg = name + ": user already on channel" + '\n';
+			send (server->_fds[i].fd, msg.c_str(), msg.size(), 0);
+			return ;
+		}
 		if (server->_channels[name]->_mode & K_PASS) {
 			if (splitted.size() <= 1) {
 				err_cannot_join_chan(server, splitted[0], i, 'k');
