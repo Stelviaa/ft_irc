@@ -6,7 +6,7 @@
 /*   By: sforesti <sforesti@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/01 15:08:43 by luxojr            #+#    #+#             */
-/*   Updated: 2024/04/19 12:19:43 by sforesti         ###   ########.fr       */
+/*   Updated: 2024/04/26 17:18:34 by sforesti         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,7 +24,8 @@ void	topic_cmd(Server *server, std::vector<std::string> split_msg, int i) {
 	}
 	if (split_msg.size() == 1) {
 		if (!server->_channels[chan]->_topic.empty()) {
-			send(server->_fds[i].fd, server->_channels[chan]->_topic.c_str(), server->_channels[chan]->_topic.size(), 0);
+			std::string msg = chan + " : " + server->_channels[chan]->_topic;
+			send(server->_fds[i].fd, msg.c_str(), msg.size(), 0);
 		}
 		else {
 			std::string	err = split_msg[0] + " :No topic is set\n";
@@ -32,10 +33,12 @@ void	topic_cmd(Server *server, std::vector<std::string> split_msg, int i) {
 		}
 	}
 	if (split_msg.size() >= 2) {
+		if (split_msg[1][0] != ':')
+			err_need_more_params(server, "TOPIC", i);
 		if ((server->_channels[chan]->_mode & T_OP) && server->_channels[chan]->is_op(server->_users[i - 1]) == -1) {
 			err_not_operator(server, split_msg[0], i);
 			return ;
 		}
-		server->_channels[chan]->_topic = split_msg[0] + " " + split_msg[1] + "\n";
+		server->_channels[chan]->_topic = split_msg[1].substr(1) + "\n";
 	}
 }

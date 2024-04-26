@@ -6,7 +6,7 @@
 /*   By: sforesti <sforesti@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/29 12:43:14 by mboyer            #+#    #+#             */
-/*   Updated: 2024/04/26 14:40:37 by sforesti         ###   ########.fr       */
+/*   Updated: 2024/04/26 17:19:21 by sforesti         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,8 +18,8 @@ void	join_rpl(Server *server, int i, std::string name) {
 	std::string	join_response = ":" + server->_users[i - 1]->getNickname() + " JOIN " + name + "\r\n";
 	send(server->_fds[i].fd, join_response.c_str(), join_response.size(), 0);
 	if (!server->_channels[name]->_topic.empty()) {
-		std::string	topic =  name + " " + server->_channels[name]->_topic; 
-		send(server->_fds[i].fd, topic.c_str(), topic.size(), 0);
+		std::string msg = name + " : " + server->_channels[name]->_topic;
+			send(server->_fds[i].fd, msg.c_str(), msg.size(), 0);
 	}
 	else {
 		std::string	err = name + " :No topic is set\n";
