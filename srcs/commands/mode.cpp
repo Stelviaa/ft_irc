@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   mode.cpp                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: sforesti <sforesti@student.42.fr>          +#+  +:+       +#+        */
+/*   By: mpelazza <mpelazza@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/01 15:30:05 by luxojr            #+#    #+#             */
-/*   Updated: 2024/04/26 11:28:22 by sforesti         ###   ########.fr       */
+/*   Updated: 2024/04/29 16:05:46 by mpelazza         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -131,7 +131,7 @@ void	mode_cmd(Server *server, std::vector<std::string> split_msg, int i) {
 				err_user_not_in_chan(server, p.user, p.chan, i);
 			int	index = server->_channels[p.chan]->is_op(server->_channels[p.chan]->_users[p.user]);
 			if (index != -1)
-				server->_channels[p.chan]->_op.erase(server->_channels[p.chan]->_op.erase(server->_channels[p.chan]->_op.begin() + index));
+				server->_channels[p.chan]->_op.erase(server->_channels[p.chan]->_op.begin() + index);
 		}
 	}
 }

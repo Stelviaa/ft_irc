@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Server.cpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: sforesti <sforesti@student.42.fr>          +#+  +:+       +#+        */
+/*   By: mpelazza <mpelazza@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/21 10:11:22 by sforesti          #+#    #+#             */
-/*   Updated: 2024/04/23 19:50:11 by sforesti         ###   ########.fr       */
+/*   Updated: 2024/04/29 15:45:59 by mpelazza         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -159,6 +159,8 @@ void	Server::kickUser(int id, std::string msg) {
 			}
 			it ++;
 		}
+		if (this->_channels[chan]->is_op(this->_users[id]) != -1)
+			this->_channels[chan]->_op.erase(this->_channels[chan]->_op.begin() + this->_channels[chan]->is_op(this->_users[id]));
 		this->_channels[chan]->_users.erase(name);
 		i ++;
 	}

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   invite.cpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: sforesti <sforesti@student.42.fr>          +#+  +:+       +#+        */
+/*   By: mpelazza <mpelazza@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/01 15:08:45 by luxojr            #+#    #+#             */
-/*   Updated: 2024/04/23 18:32:21 by sforesti         ###   ########.fr       */
+/*   Updated: 2024/04/29 15:08:46 by mpelazza         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,15 +29,15 @@ void	invite_cmd(Server *server, std::vector<std::string> split_msg, int i) {
 			send(server->_fds[i].fd, err_message.c_str(), err_message.size(), 0);
 			return ;
 		}
-		if (server->_channels[split_msg[1]]->_users.find(split_msg[0]) != server->_channels[split_msg[1]]->_users.end()) {
-			err_message += split_msg[1] + " " + split_msg[0] + " :is already on channel\n";
-			send(server->_fds[i].fd, err_message.c_str(), err_message.size(), 0);
-			return ;
-		}
 		if (server->_channels[split_msg[1]]->_mode & I_ONLY && server->_channels[split_msg[1]]->is_op(server->_users[i - 1]) == -1) {
 			err_message += split_msg[1] + " :You're not channel operator\n";
 			send(server->_fds[i].fd, err_message.c_str(), err_message.size(), 0);
 			return;
+		}
+		if (server->_channels[split_msg[1]]->_users.find(split_msg[0]) != server->_channels[split_msg[1]]->_users.end()) {
+			err_message += split_msg[1] + " " + split_msg[0] + " :is already on channel\n";
+			send(server->_fds[i].fd, err_message.c_str(), err_message.size(), 0);
+			return ;
 		}
 		server->_channels[split_msg[1]]->_invitedUsers.push_back(split_msg[0]);
 	}
